@@ -1,0 +1,14 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Transneft.WebService/.vs
+/Transneft.WebService/Transneft.Core/obj
+/Transneft.WebService/Transneft.Model/obj
+/Transneft.WebService/Transneft.WebApplication/obj
+/Transneft.WebService/Transneft.WebService/obj
+/Transneft.WebService/Transneft.Core/bin
+/Transneft.WebService/Transneft.Model/bin
+/Transneft.WebService/Transneft.WebApplication/bin
+/Transneft.WebService/Transneft.WebService/bin

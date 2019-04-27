@@ -1,0 +1,7 @@
+{
+  "ConnectionStrings": 
+  {
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TransneftTest;Trusted_Connection=True;"
+  },
+  "urls": "http://localhost:8050"
+}
