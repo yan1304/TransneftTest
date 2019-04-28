@@ -1,7 +1,7 @@
 {
-  "ConnectionStrings": 
+  "ConnectionStrings":
   {
-    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TransneftTest;Trusted_Connection=True;"
+    "DefaultConnection": "DataSource=(localdb)\\MSSQLLocalDB;Initial Catalog=TransneftTest;Integrated Security=true;"
   },
   "urls": "http://localhost:8050"
 }
