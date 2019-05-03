@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Transneft.Logic;
+using Transneft.Logic.Interfaces;
 
 namespace Transneft.WebService.Helpers
 {
@@ -13,7 +15,7 @@ namespace Transneft.WebService.Helpers
         /// <param name="services">IServiceCollection</param>
         public static void AddDependences(this IServiceCollection services)
         {
-
+            services.AddScoped<ILog, Log>();
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Transneft.Core;
+using Transneft.Model;
 
-namespace Transneft.Model.Contexts
+namespace Transneft.Logic.Contexts
 {
     /// <summary>
     /// Контекст базы данных

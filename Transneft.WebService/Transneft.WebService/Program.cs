@@ -3,7 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Transneft.Model.Contexts;
+using Transneft.Logic.Contexts;
 
 namespace Transneft.WebService
 {

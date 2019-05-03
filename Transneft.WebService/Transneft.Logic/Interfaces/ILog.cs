@@ -1,12 +1,18 @@
-﻿using Transneft.Model.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using Transneft.Model.Interfaces;
 
-namespace Transneft.Model.Interfaces
+namespace Transneft.Logic.Interfaces
 {
     /// <summary>
     /// Интерфейс лога
     /// </summary>
     public interface ILog
     {
+        /// <summary>
+        /// Логгер
+        /// </summary>
+        ILogger Logger { get; set; }
+
         /// <summary>
         /// Записать лог
         /// </summary>

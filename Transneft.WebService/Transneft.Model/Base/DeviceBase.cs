@@ -1,15 +1,9 @@
 ﻿using System;
-using Transneft.Model.Interfaces;
 
 namespace Transneft.Model.Base
 {
-    public abstract class DeviceBase : TransneftObject, IHierarchy
+    public abstract class DeviceBase : TransneftObject
     {
-        /// <summary>
-        /// Guid точки измерения электроэнергии 
-        /// </summary>
-        public Guid ParentId { get; set; }
-
         /// <summary>
         /// Номер
         /// </summary>

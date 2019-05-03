@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Transneft.Model.Contexts;
+using Transneft.Logic.Contexts;
 using Transneft.WebService.Helpers;
 
 namespace Transneft.WebService

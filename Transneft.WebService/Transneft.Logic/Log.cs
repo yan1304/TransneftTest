@@ -16,6 +16,11 @@ namespace Transneft.Logic
         private ILogger _logger;
 
         /// <summary>
+        /// Логгер
+        /// </summary>
+        public ILogger Logger { get; set; }
+
+        /// <summary>
         /// Конструктор класса 
         /// </summary>
         /// <param name="logger">Логгер</param>

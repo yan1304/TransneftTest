@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.Core", "Transneft
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.Model", "Transneft.Model\Transneft.Model.csproj", "{FCC57C64-040C-478C-8A7F-FE55CB28723A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.Logic", "Transneft.Logic\Transneft.Logic.csproj", "{14D0802C-37E2-45CE-902F-CC3ADDC4210D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{FCC57C64-040C-478C-8A7F-FE55CB28723A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCC57C64-040C-478C-8A7F-FE55CB28723A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCC57C64-040C-478C-8A7F-FE55CB28723A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

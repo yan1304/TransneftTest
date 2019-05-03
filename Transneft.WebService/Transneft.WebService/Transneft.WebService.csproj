@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Transneft.Logic\Transneft.Logic.csproj" />
     <ProjectReference Include="..\Transneft.Model\Transneft.Model.csproj" />
   </ItemGroup>
 

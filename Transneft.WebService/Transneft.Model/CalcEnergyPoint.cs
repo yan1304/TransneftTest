@@ -1,4 +1,5 @@
-﻿using Transneft.Model.Base;
+﻿using System;
+using Transneft.Model.Base;
 using Transneft.Model.Interfaces;
 
 namespace Transneft.Model
@@ -12,5 +13,20 @@ namespace Transneft.Model
         /// Наименование
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Id трансформатора тока
+        /// </summary>
+        public Guid CurTransformatorId { get; set; }
+
+        /// <summary>
+        /// Id трансформатора напряжения
+        /// </summary>
+        public Guid VoltTransformatorId { get; set; }
+
+        /// <summary>
+        /// Id Счетчика электрической энергии
+        /// </summary>
+        public Guid ElectricEnergyMeterId { get; set; }
     }
 }
