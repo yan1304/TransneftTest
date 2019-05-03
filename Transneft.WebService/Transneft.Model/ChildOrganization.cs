@@ -9,6 +9,11 @@ namespace Transneft.Model
     /// </summary>
     public class ChildOrganization : TransneftObject, IWithName, IHierarchy
     {
+        public ChildOrganization()
+        {
+
+        }
+
         /// <summary>
         /// Конструктор
         /// </summary>

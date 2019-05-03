@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Transneft.Model.Contexts;
 
 namespace Transneft.WebService
 {
@@ -24,6 +25,7 @@ namespace Transneft.WebService
             Configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                                                       .AddJsonFile("settings.json", true)
                                                       .Build();
+            TransneftDbContext.ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=TransneftTest;Trusted_Connection=True;";
             CreateWebHostBuilder(args).Build().Run();
         }
 

@@ -9,6 +9,11 @@ namespace Transneft.Model
     /// </summary>
     public class DeliveryEnergyPoint : TransneftObject, IWithName, IHierarchy
     {
+        public DeliveryEnergyPoint()
+        {
+
+        }
+
         /// <summary>
         /// Конструктор
         /// </summary>

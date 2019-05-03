@@ -9,6 +9,9 @@ namespace Transneft.Model
     /// </summary>
     public class ConsObject : AddressObject, IWithName, IHierarchy
     {
+        public ConsObject()
+        {
+        }
         /// <summary>
         /// Конструктор
         /// </summary>
