@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Transneft.Model.Contexts;
+using Microsoft.Extensions.Logging;
 
 namespace Transneft.WebService.Controllers
 {
@@ -8,21 +8,13 @@ namespace Transneft.WebService.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class CalcEnergyPointController
+    public class CalcEnergyPointController : WebServiceControllerBase
     {
-        /// <summary>
-        /// Контекст БД
-        /// </summary>
-        private TransneftDbContext context;
-
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="_logger"></param>
-        public CalcEnergyPointController()
-        {
-            context = new TransneftDbContext();
-        }
+        /// <param name="logger">Логгер</param>
+        public CalcEnergyPointController(ILogger logger) : base(logger) { }
 
         /// <summary>
         /// GET CalcEnergyPoint

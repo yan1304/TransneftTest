@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +26,7 @@ namespace Transneft.WebService
             Configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                                                       .AddJsonFile("settings.json", true)
                                                       .Build();
-            TransneftDbContext.ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=TransneftTest;Trusted_Connection=True;";
+            TransneftDbContext.ConnectionString = Configuration["ConnectionString"];
             CreateWebHostBuilder(args).Build().Run();
         }
 
@@ -36,9 +37,11 @@ namespace Transneft.WebService
         /// <returns>IWebHostBuilder</returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(Configuration)
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseKestrel()
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseKestrel(options =>
+                {
+                    options.Listen(IPAddress.Loopback, int.Parse(Configuration["ServicePort"]));
+                });
     }
 }

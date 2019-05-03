@@ -1,25 +1,23 @@
-﻿using Transneft.Model.Interfaces;
-
-namespace Transneft.Model
+﻿namespace Transneft.Model.Interfaces
 {
     /// <summary>
-    /// JSON-отклик
+    /// Интерфейс отклика
     /// </summary>
-    public class JsonResponse : IResponse
+    public interface IResponse
     {
         /// <summary>
         /// Успешно ли
         /// </summary>
-        public bool Success { get; set; }
+        bool Success { get; set; }
 
         /// <summary>
         /// Сообщение об ошибке
         /// </summary>
-        public string ErrMsg { get; set; }
+        string ErrMsg { get; set; }
 
         /// <summary>
         /// JSON-данные
         /// </summary>
-        public string Data { get; set; }
+        string Data { get; set; }
     }
 }

@@ -18,4 +18,10 @@
     <ProjectReference Include="..\Transneft.Model\Transneft.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

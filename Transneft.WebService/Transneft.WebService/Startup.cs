@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Transneft.Model.Contexts;
+using Transneft.WebService.Helpers;
 
 namespace Transneft.WebService
 {
@@ -21,7 +19,12 @@ namespace Transneft.WebService
         /// <param name="services">IServiceCollection</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddNodeServices();
+            services.AddDbContext<TransneftDbContext>(options => options.UseSqlServer(Program.Configuration["ConnectionString"]));
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new JsonParamFilter());
+            });
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace Transneft.WebService
         /// <param name="loggerFactory">ILoggerFactory</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
+            loggerFactory.AddConsole(LogLevel.Warning);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
