@@ -7,7 +7,7 @@ using Taransneft.Logic.Interfaces;
 namespace Transneft.WebService.Controllers
 {
     /// <summary>
-    /// Контроллер дляработы с точками измерения
+    /// Контроллер для работы с точками измерения
     /// </summary>
     [ApiController]
     [Route("[controller]")]
@@ -27,7 +27,7 @@ namespace Transneft.WebService.Controllers
         /// <param name="data">CalcEnergyPoint в json-формате</param>
         /// <returns>JSON-отклик</returns>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] object data)
+        public async Task<IActionResult> Post([FromBody] object data)
         {
             Log("Start POST CalcEnergyPoint");
             try

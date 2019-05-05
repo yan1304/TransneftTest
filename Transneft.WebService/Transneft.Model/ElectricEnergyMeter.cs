@@ -8,6 +8,7 @@ namespace Transneft.Model
     /// </summary>
     public class ElectricEnergyMeter : DeviceBase, IWithType
     {
+
         /// <summary>
         /// Тип счетчика
         /// </summary>

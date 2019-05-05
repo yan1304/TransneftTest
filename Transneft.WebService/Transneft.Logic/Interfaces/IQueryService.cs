@@ -21,27 +21,27 @@ namespace Taransneft.Logic.Interfaces
         /// </summary>
         /// <param name="year">Год</param>
         /// <returns>Расчетные приборы учета</returns>
-        Task<IEnumerable<CalculatedDevice>> GetCalculatedDevices(int year);
+        IEnumerable<CalculatedDevice> GetCalculatedDevices(int year);
 
         /// <summary>
         /// По указанному объекту потребления выбрать все счетчики с закончишившимся сроком проверки
         /// </summary>
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Счетчики электрической энергии</returns>
-        Task<IEnumerable<ElectricEnergyMeter>> GetDeadlinedEnergyMeters(Guid consObjectId);
+        IEnumerable<ElectricEnergyMeter> GetDeadlinedEnergyMeters(string consObjectId);
 
         /// <summary>
         /// По указанному объекту потребления выбрать все трансформаторы напряжения с закончишившимся сроком проверки
         /// </summary>
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Трансформаторы напряжения</returns>
-        Task<IEnumerable<VoltTransformator>> GetDeadlinedVoltTransformators(Guid consObjectId);
+        IEnumerable<VoltTransformator> GetDeadlinedVoltTransformators(string consObjectId);
 
         /// <summary>
         /// По указанному объекту потребления выбрать все трансформаторы тока с закончишившимся сроком проверки
         /// </summary>
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Трансформаторы тока</returns>
-        Task<IEnumerable<CurTransformator>> GetDeadlinedCurTransformators(Guid consObjectId);
+        IEnumerable<CurTransformator> GetDeadlinedCurTransformators(string consObjectId);
     }
 }

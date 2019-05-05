@@ -60,10 +60,6 @@ namespace Taransneft.Logic
             {
                 throw new Exception("Отсутствует параметр ElectricEnergyMeterId!");
             }
-            else if (param.Id.IsNull())
-            {
-                param.Id = Guid.NewGuid();
-            }
             else if (!_context.CurTransformators.Any(z => z.Id == param.CurTransformatorId))
             {
                 throw new Exception($"Не найден трансформатор тока с Id = {param.CurTransformatorId}!");
@@ -89,6 +85,11 @@ namespace Taransneft.Logic
                 throw new Exception($"Счетчик электрической энергии с Id = {param.ElectricEnergyMeterId} уже имеет привязку к точке измерения электроэнергии!");
             }
 
+            if (param.Id.IsNull())
+            {
+                param.Id = Guid.NewGuid();
+            }
+
             await _context.CalcEnergyPoints.AddAsync(param);
         }
 
@@ -97,9 +98,21 @@ namespace Taransneft.Logic
         /// </summary>
         /// <param name="year">Год</param>
         /// <returns>Рассчетные приборы учета</returns>
-        public async Task<IEnumerable<CalculatedDevice>> GetCalculatedDevices(int year)
+        public IEnumerable<CalculatedDevice> GetCalculatedDevices(int year)
         {
-            throw new NotImplementedException();
+            if (year < 1900 || year > 2050)
+            {
+                throw new Exception("Указан некорректный год");
+            }
+
+            var deviceIds = _context.CalcPointAndDevices
+                .Where(z => z.DateFrom.Year <= year && z.DateTo.Year >= year)
+                .Select(z => z.DeviceGuid)
+                .ToArray();
+
+            return _context.CalculatedDevices
+                .Where(z => deviceIds.Any(x => z.Id == x))
+                .ToArray();
         }
 
         /// <summary>
@@ -107,9 +120,28 @@ namespace Taransneft.Logic
         /// </summary>
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Счетчики электрической энергии</returns>
-        public async Task<IEnumerable<ElectricEnergyMeter>> GetDeadlinedEnergyMeters(Guid consObjectId)
+        public IEnumerable<ElectricEnergyMeter> GetDeadlinedEnergyMeters(string consObjectId)
         {
-            throw new NotImplementedException();
+            var id = GetConsObjId(consObjectId);
+            CheckConsObjId(id);
+
+            // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
+            var energyPointIds = _context.CalcEnergyPoints
+                .Where(z => z.ParentId == id)
+                .Select(z => new { z.Id, z.ElectricEnergyMeterId})
+                .ToArray();
+
+            var deadlinedPoints = _context.CalcPointAndDevices
+                .Where(z => energyPointIds.Any(x => x.Id == z.PointGuid))
+                .GroupBy(z => z.PointGuid)
+                .Where(z => z.Max(x => x.DateTo < DateTime.Now))
+                .Select(z => z.Key);
+
+            energyPointIds = energyPointIds.Where(z => deadlinedPoints.Any(x => x == z.Id)).ToArray();
+
+            return _context.ElectricEnergyMeters
+                .Where(z => z.CheckDate.IsNull() && energyPointIds.Any(x => x.ElectricEnergyMeterId == z.Id))
+                .ToArray();
         }
 
         /// <summary>
@@ -117,9 +149,28 @@ namespace Taransneft.Logic
         /// </summary>
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Трансформаторы напряжения</returns>
-        public async Task<IEnumerable<VoltTransformator>> GetDeadlinedVoltTransformators(Guid consObjectId)
+        public IEnumerable<VoltTransformator> GetDeadlinedVoltTransformators(string consObjectId)
         {
-            throw new NotImplementedException();
+            var id = GetConsObjId(consObjectId);
+            CheckConsObjId(id);
+
+            // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
+            var energyPointIds = _context.CalcEnergyPoints
+                .Where(z => z.ParentId == id)
+                .Select(z => new { z.Id, z.VoltTransformatorId })
+                .ToArray();
+
+            var deadlinedPoints = _context.CalcPointAndDevices
+                .Where(z => energyPointIds.Any(x => x.Id == z.PointGuid))
+                .GroupBy(z => z.PointGuid)
+                .Where(z => z.Max(x => x.DateTo < DateTime.Now))
+                .Select(z => z.Key);
+
+            energyPointIds = energyPointIds.Where(z => deadlinedPoints.Any(x => x == z.Id)).ToArray();
+
+            return _context.VoltTransformators
+                .Where(z => z.CheckDate.IsNull() && energyPointIds.Any(x => x.VoltTransformatorId == z.Id))
+                .ToArray();
         }
 
         /// <summary>
@@ -127,9 +178,54 @@ namespace Taransneft.Logic
         /// </summary>
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Трансформаторы тока</returns>
-        public async Task<IEnumerable<CurTransformator>> GetDeadlinedCurTransformators(Guid consObjectId)
+        public IEnumerable<CurTransformator> GetDeadlinedCurTransformators(string consObjectId)
         {
-            throw new NotImplementedException();
+            var id = GetConsObjId(consObjectId);
+            CheckConsObjId(id);
+
+            // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
+            var energyPointIds = _context.CalcEnergyPoints
+                .Where(z => z.ParentId == id)
+                .Select(z => new { z.Id, z.CurTransformatorId })
+                .ToArray();
+
+            var deadlinedPoints = _context.CalcPointAndDevices
+                .Where(z => energyPointIds.Any(x => x.Id == z.PointGuid))
+                .GroupBy(z => z.PointGuid)
+                .Where(z => z.Max(x => x.DateTo < DateTime.Now))
+                .Select(z => z.Key);
+
+            energyPointIds = energyPointIds.Where(z => deadlinedPoints.Any(x => x == z.Id)).ToArray();
+
+            return _context.CurTransformators
+                .Where(z => z.CheckDate.IsNull() && energyPointIds.Any(x => x.CurTransformatorId == z.Id))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Получить Id объекта потребления из строки
+        /// </summary>
+        /// <param name="consObjectId">Id объекта потребления</param>
+        private Guid GetConsObjId(string consObjectId)
+        {
+            if (!Guid.TryParse(consObjectId, out var id))
+            {
+                throw new Exception("Неверное значение параметра consObjectId");
+            }
+
+            return id;
+        }
+
+        /// <summary>
+        /// Проверить, что объект потребления существует
+        /// </summary>
+        /// <param name="id">Guid</param>
+        private void CheckConsObjId(Guid id)
+        {
+            if (!_context.ConsObjects.Any(z => z.Id == id))
+            {
+                throw new Exception($"Не найден объект потребления с Id = {id}");
+            }
         }
     }
 }

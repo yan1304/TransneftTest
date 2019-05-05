@@ -12,6 +12,6 @@ namespace Transneft.Model.Base
         /// <summary>
         /// Дата проверки
         /// </summary>
-        public DateTime CheckDate { get; set; } 
+        public DateTime? CheckDate { get; set; } 
     }
 }

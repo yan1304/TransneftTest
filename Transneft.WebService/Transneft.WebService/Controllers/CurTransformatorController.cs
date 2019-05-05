@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Taransneft.Logic.Interfaces;
 
 namespace Transneft.WebService.Controllers
 {
-    public class CurTransformatorController
+    [ApiController]
+    [Route("[controller]")]
+    public class CurTransformatorController : WebServiceControllerBase
     {
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="logger">Логгер</param>
+        /// <param name="service">Сервис для работы с БД</param>
+        public CurTransformatorController(ILogger logger, IQueryService service) : base(logger, service) { }
     }
 }

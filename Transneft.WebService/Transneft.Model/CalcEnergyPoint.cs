@@ -10,6 +10,11 @@ namespace Transneft.Model
     public class CalcEnergyPoint : TransneftObject, IWithName
     {
         /// <summary>
+        /// Id объекта потребления
+        /// </summary>
+        public Guid ParentId { get; set; }
+
+        /// <summary>
         /// Наименование
         /// </summary>
         public string Name { get; set; }
