@@ -55,6 +55,11 @@ namespace Transneft.Logic.Contexts
         public DbSet<CurTransformator> CurTransformators { get; set; }
 
         /// <summary>
+        /// Трансформаторы напряжения
+        /// </summary>
+        public DbSet<VoltTransformator> VoltTransformators { get; set; }
+
+        /// <summary>
         /// Расчётные приборы учета
         /// </summary>
         public DbSet<CalculatedDevice> CalculatedDevices { get; set; }

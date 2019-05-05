@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Taransneft.Logic.Interfaces;
-using Transneft.Model;
 
 namespace Transneft.WebService.Controllers
 {

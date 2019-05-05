@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Taransneft.Logic.Interfaces;
 using Transneft.Core;
@@ -43,6 +44,10 @@ namespace Taransneft.Logic
             {
                 throw new Exception("Отсутствует параметр Name!");
             }
+            else if (_context.CalcEnergyPoints.Any(z => z.Name == param.Name))
+            {
+                throw new Exception($"Точка измерения электроэнергии с именем {param.Name} уже существует!");
+            }
             else if (param.VoltTransformatorId.IsNull())
             {
                 throw new Exception("Отсутствует параметр VoltTransformatorId!");
@@ -59,6 +64,32 @@ namespace Taransneft.Logic
             {
                 param.Id = Guid.NewGuid();
             }
+            else if (!_context.CurTransformators.Any(z => z.Id == param.CurTransformatorId))
+            {
+                throw new Exception($"Не найден трансформатор тока с Id = {param.CurTransformatorId}!");
+            }
+            else if (_context.CalcEnergyPoints.Any(z => z.CurTransformatorId == param.CurTransformatorId))
+            {
+                throw new Exception($"Трансформатор тока с Id = {param.CurTransformatorId} уже имеет привязку к точке измерения электроэнергии!");
+            }
+            else if (!_context.VoltTransformators.Any(z => z.Id == param.VoltTransformatorId))
+            {
+                throw new Exception($"Не найден трансформатор напряжения с Id = {param.VoltTransformatorId}!");
+            }
+            else if (_context.CalcEnergyPoints.Any(z => z.VoltTransformatorId == param.VoltTransformatorId))
+            {
+                throw new Exception($"Трансформатор напряжения с Id = {param.VoltTransformatorId} уже имеет привязку к точке измерения электроэнергии!");
+            }
+            else if (!_context.ElectricEnergyMeters.Any(z => z.Id == param.ElectricEnergyMeterId))
+            {
+                throw new Exception($"Не найден счетчик электрической энергии с Id = {param.ElectricEnergyMeterId}!");
+            }
+            else if (_context.CalcEnergyPoints.Any(z => z.ElectricEnergyMeterId == param.ElectricEnergyMeterId))
+            {
+                throw new Exception($"Счетчик электрической энергии с Id = {param.ElectricEnergyMeterId} уже имеет привязку к точке измерения электроэнергии!");
+            }
+
+            await _context.CalcEnergyPoints.AddAsync(param);
         }
 
         /// <summary>
