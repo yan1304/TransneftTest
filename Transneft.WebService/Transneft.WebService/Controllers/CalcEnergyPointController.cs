@@ -31,11 +31,14 @@ namespace Transneft.WebService.Controllers
         public async Task<ActionResult> Post([FromBody] object data)
         {
             Log("Start POST CalcEnergyPoint");
-            CalcEnergyPoint param = null;
             try
             {
                 var json = $"{data}";
+                Log($"Param: {json}");
+                Log("Start QueryService.AddCalcEnergyPoint");
                 await QueryService.AddCalcEnergyPoint(json);
+                Log("End QueryService.AddCalcEnergyPoint");
+                Log("End POST CalcEnergyPoint");
                 return new JsonResult("OK");
 
             }

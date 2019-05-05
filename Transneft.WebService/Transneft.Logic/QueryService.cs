@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Taransneft.Logic.Interfaces;
 using Transneft.Core;
+using Transneft.Logic.Contexts;
 using Transneft.Model;
 
 namespace Taransneft.Logic
@@ -13,6 +14,20 @@ namespace Taransneft.Logic
     public class QueryService : IQueryService
     {
         /// <summary>
+        /// Контекст БД
+        /// </summary>
+        private readonly TransneftDbContext _context;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="ctx">Контекст БД</param>
+        public QueryService(TransneftDbContext ctx)
+        {
+            _context = ctx;
+        }
+
+        /// <summary>
         /// Добавить новую точку измерения с указанием счетчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="json">JSON-данные для добавления</param>
@@ -20,7 +35,7 @@ namespace Taransneft.Logic
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                throw new Exception("Отсутствует параметр!");
+                throw new Exception("Отсутствует JSON-параметр!");
             }
 
             var param = json.FromJson<CalcEnergyPoint>();
