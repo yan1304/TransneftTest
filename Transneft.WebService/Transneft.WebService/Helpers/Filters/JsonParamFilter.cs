@@ -22,7 +22,7 @@ namespace Transneft.WebService.Helpers
             var resultContext = await next();
             if (resultContext.HttpContext.Response.StatusCode == 502)
             {
-                resultContext.Result = new JsonResult(new JsonResponse { ErrMsg = "Некорректный JSON-параметр" });
+                resultContext.Result = new BadRequestObjectResult("Некорректный JSON-параметр");
             }
         }
     }

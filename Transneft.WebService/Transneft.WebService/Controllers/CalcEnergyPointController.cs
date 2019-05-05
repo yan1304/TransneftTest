@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using Transneft.Core;
+using System.Threading.Tasks;
+using Taransneft.Logic.Interfaces;
 using Transneft.Model;
 
 namespace Transneft.WebService.Controllers
@@ -17,7 +18,8 @@ namespace Transneft.WebService.Controllers
         /// Конструктор
         /// </summary>
         /// <param name="logger">Логгер</param>
-        public CalcEnergyPointController(ILogger logger) : base(logger) { }
+        /// <param name="service">Сервис для работы с БД</param>
+        public CalcEnergyPointController(ILogger logger, IQueryService service) : base(logger, service) { }
 
         /// <summary>
         /// POST CalcEnergyPoint (задание 1.2 п.1)
@@ -26,47 +28,22 @@ namespace Transneft.WebService.Controllers
         /// <param name="data">CalcEnergyPoint в json-формате</param>
         /// <returns>JSON-отклик</returns>
         [HttpPost]
-        public JsonResult Post([FromBody] object data)
+        public async Task<ActionResult> Post([FromBody] object data)
         {
-            Logger.Write("Start POST CalcEnergyPoint");
+            Log("Start POST CalcEnergyPoint");
             CalcEnergyPoint param = null;
             try
             {
                 var json = $"{data}";
-                if (string.IsNullOrWhiteSpace(json))
-                {
-                    return WriteLogAndReturn(new JsonResponse { ErrMsg = "Отсутствует параметр!" });
-                }
-
-                param = json.FromJson<CalcEnergyPoint>();
-                if (param.Name.IsNull())
-                {
-                    return WriteLogAndReturn(new JsonResponse { ErrMsg = "Отсутствует параметр Name!" });
-                }
-                else if (param.VoltTransformatorId.IsNull())
-                {
-                    return WriteLogAndReturn(new JsonResponse { ErrMsg = "Отсутствует параметр VoltTransformatorId!" });
-                }
-                else if (param.CurTransformatorId.IsNull())
-                {
-                    return WriteLogAndReturn(new JsonResponse { ErrMsg = "Отсутствует параметр CurTransformatorId!" });
-                }
-                else if (param.ElectricEnergyMeterId.IsNull())
-                {
-                    return WriteLogAndReturn(new JsonResponse { ErrMsg = "Отсутствует параметр ElectricEnergyMeterId!" });
-                }
-                else if (param.Id.IsNull())
-                {
-                    param.Id = Guid.NewGuid();
-                }
+                await QueryService.AddCalcEnergyPoint(json);
+                return new JsonResult("OK");
 
             }
-            catch
+            catch (Exception ex)
             {
-                return WriteLogAndReturn(new JsonResponse { ErrMsg = "Некорректный JSON-параметр" });
+                Log($"Ошибка: {ex.Message}");
+                return new BadRequestObjectResult($"Ошибка: {ex.Message}");
             }
-
-            return new JsonResult("ОК");
         }
     }
 }
