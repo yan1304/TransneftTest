@@ -6,7 +6,7 @@ namespace Transneft.WebApplication.Controllers
     /// <summary>
     /// Контроллер для отправления/получения с WebService
     /// </summary>
-    public class DataController : Controller
+    public class HomeController : Controller
     {
         /// <summary>
         /// Главная страница
@@ -26,6 +26,17 @@ namespace Transneft.WebApplication.Controllers
         /// <returns>IActionResult</returns>
         [HttpGet]
         public IActionResult Table(string id, string deviceType)
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Добавить точку измерения электроэнергии
+        /// </summary>
+        /// <param name="point">Точка измерения электроэнергии</param>
+        /// <returns>IActionResult</returns>
+        [HttpGet]
+        public IActionResult AddPoint()
         {
             return View();
         }

@@ -20,6 +20,7 @@ namespace Transneft.Model.Base
         /// </summary>
         [Key]
         [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
     }
