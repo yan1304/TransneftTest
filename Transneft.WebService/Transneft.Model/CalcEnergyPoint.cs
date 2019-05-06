@@ -1,37 +1,26 @@
 ﻿using System;
 using Transneft.Model.Base;
-using Transneft.Model.Interfaces;
 
 namespace Transneft.Model
 {
     /// <summary>
     /// Точка измерения электроэнергии
     /// </summary>
-    public class CalcEnergyPoint : TransneftObject, IWithName
+    public class CalcEnergyPoint : EnergyPointBase
     {
         /// <summary>
-        /// Id объекта потребления
+        /// Трансформатор тока
         /// </summary>
-        public Guid ParentId { get; set; }
+        public CurTransformator CurTransformator { get; set; }
 
         /// <summary>
-        /// Наименование
+        /// Трансформатор напряжения
         /// </summary>
-        public string Name { get; set; }
+        public VoltTransformator VoltTransformator { get; set; }
 
         /// <summary>
-        /// Id трансформатора тока
+        /// Счетчик электрической энергии
         /// </summary>
-        public Guid CurTransformatorId { get; set; }
-
-        /// <summary>
-        /// Id трансформатора напряжения
-        /// </summary>
-        public Guid VoltTransformatorId { get; set; }
-
-        /// <summary>
-        /// Id Счетчика электрической энергии
-        /// </summary>
-        public Guid ElectricEnergyMeterId { get; set; }
+        public ElectricEnergyMeter ElectricEnergyMeter { get; set; }
     }
 }

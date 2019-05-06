@@ -5,16 +5,11 @@ namespace Transneft.Model.Base
     /// <summary>
     /// Базовый класс транформатора
     /// </summary>
-    public abstract class Transformator : DeviceBase, IWithType
+    public abstract class Transformator : ElectricEnergyMeter
     {
         /// <summary>
-        /// Тип трансформатора тока
+        /// Коэффицент трансформации
         /// </summary>
-        public string Type { get; set; }
-
-        /// <summary>
-        /// КТН (Коэффицент трансформации)
-        /// </summary>
-        public double KTN { get; set; }
+        public double KT { get; set; }
     }
 }

@@ -43,6 +43,25 @@
             </summary>
             <returns>JSON-отклик</returns>
         </member>
+        <member name="T:Transneft.WebService.Controllers.ChildOrganizationController">
+            <summary>
+            Контроллер для работы с дочерними организациями
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.ChildOrganizationController.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">Логгер</param>
+            <param name="service">Сервис для работы с БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.ChildOrganizationController.Get(System.String)">
+            <summary>
+            GET ChildOrganization (задание 1.2 п.5)
+            Получить дочерние организации
+            </summary>
+            <returns>JSON-отклик</returns>
+        </member>
         <member name="T:Transneft.WebService.Controllers.CurTransformatorController">
             <summary>
             Контроллер для работы с трансформаторами тока

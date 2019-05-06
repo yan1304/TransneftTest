@@ -43,5 +43,11 @@ namespace Taransneft.Logic.Interfaces
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Трансформаторы тока</returns>
         IEnumerable<CurTransformator> GetDeadlinedCurTransformators(string consObjectId);
+
+        /// <summary>
+        /// Получить все дочерние организации
+        /// </summary>
+        /// <returns>Дочерние организации</returns>
+        IEnumerable<ChildOrganization> GetAllChildOrganizations();
     }
 }

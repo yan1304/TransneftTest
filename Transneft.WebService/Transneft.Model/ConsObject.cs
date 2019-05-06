@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Transneft.Model.Base;
 using Transneft.Model.Interfaces;
 
@@ -7,25 +8,31 @@ namespace Transneft.Model
     /// <summary>
     /// Объект потребления
     /// </summary>
-    public class ConsObject : AddressObject, IWithName, IHierarchy
+    public class ConsObject : OrganizationBase, IHierarchy
     {
-        public ConsObject()
-        {
-        }
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="parent">Guid дочерней организации</param>
-        public ConsObject(Guid parent) : base() => ParentId = parent;
-
-        /// <summary>
-        /// Наименование объекта
-        /// </summary>
-        public string Name { get; set; }
+        public ConsObject() => DeliveryEnergyPoints = new List<DeliveryEnergyPoint>();
 
         /// <summary>
         /// Guid дочерней организации
         /// </summary>
         public Guid ParentId { get; set; }
+
+        /// <summary>
+        /// Дочерняя организация
+        /// </summary>
+        public ChildOrganization ChildOrganization { get; set; }
+
+        /// <summary>
+        /// Точки поставки электроэнергии
+        /// </summary>
+        public IEnumerable<DeliveryEnergyPoint> DeliveryEnergyPoints { get; set; }
+
+        /// <summary>
+        /// Точки измерения электроэнергии
+        /// </summary>
+        public IEnumerable<CalcEnergyPoint> CalcEnergyPoints { get; set; }
     }
 }

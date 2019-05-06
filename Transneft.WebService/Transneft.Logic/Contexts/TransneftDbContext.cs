@@ -87,6 +87,8 @@ namespace Transneft.Logic.Contexts
         /// <param name="modelBuilder">ModelBuilder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            AddUniqueKeys(modelBuilder);
+
             //Тест
             modelBuilder.Entity<Organization>().HasData(
                 new Organization
@@ -101,5 +103,28 @@ namespace Transneft.Logic.Contexts
         /// </summary>
         /// <param name="optionsBuilder">DbContextOptionsBuilder</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(ConnectionString);
+
+        /// <summary>
+        /// Сделать поля уникальными
+        /// </summary>
+        /// <param name="modelBuilder">ModelBuilder</param>
+        private void AddUniqueKeys(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Organization>()
+                .HasIndex(z => z.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<ChildOrganization>()
+                .HasIndex(z => new { z.Name, z.ParentId })
+                .IsUnique();
+
+            modelBuilder.Entity<ConsObject>()
+                .HasIndex(z => new { z.Name, z.ParentId })
+                .IsUnique();
+
+            modelBuilder.Entity<CalcEnergyPoint>()
+                .HasIndex(z => new { z.Name, z.ParentId })
+                .IsUnique();
+        }
     }
 }

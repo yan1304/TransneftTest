@@ -1,16 +1,21 @@
-﻿using Transneft.Model.Base;
-using Transneft.Model.Interfaces;
+﻿using System.Collections.Generic;
+using Transneft.Model.Base;
 
 namespace Transneft.Model
 {
     /// <summary>
     /// Организация
     /// </summary>
-    public class Organization : AddressObject, IWithName
+    public class Organization : OrganizationBase
     {
         /// <summary>
-        /// Наименование
+        /// Конструктор
         /// </summary>
-        public string Name { get; set; }
+        public Organization() => ChildOrganizations = new List<ChildOrganization>();
+
+        /// <summary>
+        /// Дочерние организации
+        /// </summary>
+        public IEnumerable<ChildOrganization> ChildOrganizations { get; set; }
     }
 }

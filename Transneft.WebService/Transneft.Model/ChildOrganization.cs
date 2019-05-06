@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Transneft.Model.Base;
 using Transneft.Model.Interfaces;
 
@@ -7,27 +8,26 @@ namespace Transneft.Model
     /// <summary>
     /// Дочерняя организация
     /// </summary>
-    public class ChildOrganization : TransneftObject, IWithName, IHierarchy
+    public class ChildOrganization : OrganizationBase, IHierarchy
     {
-        public ChildOrganization()
-        {
-
-        }
-
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="parent">Guid организации-владельца</param>
-        public ChildOrganization(Guid parent) :base() => ParentId = parent;
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Name { get; set; }
+        public ChildOrganization() => ConsObjects = new List<ConsObject>();
 
         /// <summary>
         /// Guid организации-владельца
         /// </summary>
         public Guid ParentId { get; set; } 
+
+        /// <summary>
+        /// Организация-владелец
+        /// </summary>
+        public Organization Organization { get; set; }
+
+        /// <summary>
+        /// Объекты потребления
+        /// </summary>
+        public IEnumerable<ConsObject> ConsObjects { get; set; }
     }
 }

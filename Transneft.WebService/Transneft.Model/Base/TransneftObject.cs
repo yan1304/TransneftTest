@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Transneft.Model.Base
 {
@@ -17,6 +19,8 @@ namespace Transneft.Model.Base
         /// Id
         /// </summary>
         [Key]
+        [HiddenInput(DisplayValue = false)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
     }
 }
