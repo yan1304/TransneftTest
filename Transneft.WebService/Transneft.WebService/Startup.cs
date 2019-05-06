@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 using Transneft.Logic.Contexts;
 using Transneft.WebService.Helpers;
 
@@ -25,6 +27,19 @@ namespace Transneft.WebService
             {
                 options.Filters.Add(new JsonParamFilter());
             });
+
+            services.AddSwaggerGen(
+                c =>
+                {
+                    c.SwaggerDoc("v1", new Info
+                    {
+                        Version = "v1",
+                        Title = "Transneft.WebService",
+                        Description = "Swagger for Transneft.WebService" 
+                    });
+
+                    c.IncludeXmlComments(GetXmlCommentsPath());
+                });
         }
 
         /// <summary>
@@ -42,6 +57,14 @@ namespace Transneft.WebService
             }
 
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/Swagger/v1/swagger.json", "Transneft.WebService"));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static string GetXmlCommentsPath() => $@"{Directory.GetCurrentDirectory()}\Transneft.WebService.XML";
     }
 }

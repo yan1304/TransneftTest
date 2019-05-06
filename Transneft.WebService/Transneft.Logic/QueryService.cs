@@ -34,7 +34,7 @@ namespace Taransneft.Logic
         /// <param name="json">JSON-данные для добавления</param>
         public async Task AddCalcEnergyPoint(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
+            if (json.IsNullOrWhiteSpace())
             {
                 throw new Exception("Отсутствует JSON-параметр!");
             }
@@ -111,7 +111,7 @@ namespace Taransneft.Logic
                 .ToArray();
 
             return _context.CalculatedDevices
-                .Where(z => deviceIds.Any(x => z.Id == x))
+                .Where(z => z.Id.In(deviceIds))
                 .ToArray();
         }
 
@@ -132,15 +132,16 @@ namespace Taransneft.Logic
                 .ToArray();
 
             var deadlinedPoints = _context.CalcPointAndDevices
-                .Where(z => energyPointIds.Any(x => x.Id == z.PointGuid))
+                .Where(z => z.PointGuid.In(energyPointIds.Select(x => x.Id).ToArray()))
                 .GroupBy(z => z.PointGuid)
                 .Where(z => z.Max(x => x.DateTo < DateTime.Now))
-                .Select(z => z.Key);
+                .Select(z => z.Key)
+                .ToArray();
 
-            energyPointIds = energyPointIds.Where(z => deadlinedPoints.Any(x => x == z.Id)).ToArray();
+            energyPointIds = energyPointIds.Where(z => z.Id.In(deadlinedPoints)).ToArray();
 
             return _context.ElectricEnergyMeters
-                .Where(z => z.CheckDate.IsNull() && energyPointIds.Any(x => x.ElectricEnergyMeterId == z.Id))
+                .Where(z => z.CheckDate.IsNull() && z.Id.In(energyPointIds.Select(x => x.ElectricEnergyMeterId).ToArray()))
                 .ToArray();
         }
 
@@ -161,15 +162,16 @@ namespace Taransneft.Logic
                 .ToArray();
 
             var deadlinedPoints = _context.CalcPointAndDevices
-                .Where(z => energyPointIds.Any(x => x.Id == z.PointGuid))
+                .Where(z => z.PointGuid.In(energyPointIds.Select(x => x.Id).ToArray()))
                 .GroupBy(z => z.PointGuid)
                 .Where(z => z.Max(x => x.DateTo < DateTime.Now))
-                .Select(z => z.Key);
+                .Select(z => z.Key)
+                .ToArray();
 
-            energyPointIds = energyPointIds.Where(z => deadlinedPoints.Any(x => x == z.Id)).ToArray();
+            energyPointIds = energyPointIds.Where(z => z.Id.In(deadlinedPoints)).ToArray();
 
             return _context.VoltTransformators
-                .Where(z => z.CheckDate.IsNull() && energyPointIds.Any(x => x.VoltTransformatorId == z.Id))
+                .Where(z => z.CheckDate.IsNull() && z.Id.In(energyPointIds.Select(x => x.VoltTransformatorId).ToArray()))
                 .ToArray();
         }
 
@@ -190,15 +192,16 @@ namespace Taransneft.Logic
                 .ToArray();
 
             var deadlinedPoints = _context.CalcPointAndDevices
-                .Where(z => energyPointIds.Any(x => x.Id == z.PointGuid))
+                .Where(z => z.PointGuid.In(energyPointIds.Select(x => x.Id).ToArray()))
                 .GroupBy(z => z.PointGuid)
                 .Where(z => z.Max(x => x.DateTo < DateTime.Now))
-                .Select(z => z.Key);
+                .Select(z => z.Key)
+                .ToArray();
 
-            energyPointIds = energyPointIds.Where(z => deadlinedPoints.Any(x => x == z.Id)).ToArray();
+            energyPointIds = energyPointIds.Where(z => z.Id.In(deadlinedPoints)).ToArray();
 
             return _context.CurTransformators
-                .Where(z => z.CheckDate.IsNull() && energyPointIds.Any(x => x.CurTransformatorId == z.Id))
+                .Where(z => z.CheckDate.IsNull() && z.Id.In(energyPointIds.Select(x => x.CurTransformatorId).ToArray()))
                 .ToArray();
         }
 

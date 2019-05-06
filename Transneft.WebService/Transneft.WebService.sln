@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.WebService", "Transneft.WebService\Transneft.WebService.csproj", "{71D9A4DE-AAF8-43DA-AD8A-04EEE7E531CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.WebApplication", "Transneft.WebApplication\Transneft.WebApplication.csproj", "{7A2929DA-D06F-4D28-BE1F-8B3069677FDF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.Core", "Transneft.Core\Transneft.Core.csproj", "{E51FE76F-12E1-4267-BC8A-E68F5F22ADCE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.Model", "Transneft.Model\Transneft.Model.csproj", "{FCC57C64-040C-478C-8A7F-FE55CB28723A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transneft.Logic", "Transneft.Logic\Transneft.Logic.csproj", "{14D0802C-37E2-45CE-902F-CC3ADDC4210D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transneft.WebApplication", "Transneft.WebApplication\Transneft.WebApplication.csproj", "{0C29A02D-A826-466B-A706-B6B5D4A0560C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		{71D9A4DE-AAF8-43DA-AD8A-04EEE7E531CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71D9A4DE-AAF8-43DA-AD8A-04EEE7E531CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71D9A4DE-AAF8-43DA-AD8A-04EEE7E531CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A2929DA-D06F-4D28-BE1F-8B3069677FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A2929DA-D06F-4D28-BE1F-8B3069677FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A2929DA-D06F-4D28-BE1F-8B3069677FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A2929DA-D06F-4D28-BE1F-8B3069677FDF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E51FE76F-12E1-4267-BC8A-E68F5F22ADCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E51FE76F-12E1-4267-BC8A-E68F5F22ADCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E51FE76F-12E1-4267-BC8A-E68F5F22ADCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14D0802C-37E2-45CE-902F-CC3ADDC4210D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C29A02D-A826-466B-A706-B6B5D4A0560C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C29A02D-A826-466B-A706-B6B5D4A0560C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C29A02D-A826-466B-A706-B6B5D4A0560C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C29A02D-A826-466B-A706-B6B5D4A0560C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

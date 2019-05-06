@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Threading.Tasks;
 using Taransneft.Logic.Interfaces;
 
 namespace Transneft.WebService.Controllers
@@ -25,8 +24,7 @@ namespace Transneft.WebService.Controllers
         /// Выбрать все расчетные приборы в 2018 году
         /// </summary>
         /// <returns>JSON-отклик</returns>
-        [HttpGet("{year}")]
-        [HttpGet()]
+        [HttpGet]
         public IActionResult Get()
         {
             Log("Start GET CalculatedDevice");

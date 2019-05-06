@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Transneft.WebService</name>
+    </assembly>
+    <members>
+        <member name="T:Transneft.WebService.Controllers.CalcEnergyPointController">
+            <summary>
+            Контроллер для работы с точками измерения
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.CalcEnergyPointController.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">Логгер</param>
+            <param name="service">Сервис для работы с БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.CalcEnergyPointController.Post(System.Object)">
+            <summary>
+            POST CalcEnergyPoint (задание 1.2 п.1)
+            Добавить новую точку измерения напряжения с указанием счётчика, трансформатора тока и трансформатора напряжения
+            </summary>
+            <param name="data">CalcEnergyPoint в json-формате</param>
+            <returns>JSON-отклик</returns>
+        </member>
+        <member name="T:Transneft.WebService.Controllers.CalculatedDeviceController">
+            <summary>
+            Контроллер для работы с расчетными приборами учета
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.CalculatedDeviceController.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">Логгер</param>
+            <param name="service">Сервис для работы с БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.CalculatedDeviceController.Get">
+            <summary>
+            GET CalculatedDevice (задание 1.2 п.2)
+            Выбрать все расчетные приборы в 2018 году
+            </summary>
+            <returns>JSON-отклик</returns>
+        </member>
+        <member name="T:Transneft.WebService.Controllers.CurTransformatorController">
+            <summary>
+            Контроллер для работы с трансформаторами тока
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.CurTransformatorController.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">Логгер</param>
+            <param name="service">Сервис для работы с БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.CurTransformatorController.Get(System.String)">
+            <summary>
+            GET CurTransformator (задание 1.2 п.5)
+            По указанному объекту потребления выбрать все трансформаторы тока с закончишившимся сроком проверки
+            </summary>
+            <param name="id">Id объекта потребления</param>
+            <returns>JSON-отклик</returns>
+        </member>
+        <member name="T:Transneft.WebService.Controllers.DefaultController">
+            <summary>
+            Стандартный контроллер
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.DefaultController.Index">
+            <summary>
+            Использовать для проверки успешного соединения с сервисом
+            </summary>
+            <returns>Отклик</returns>
+        </member>
+        <member name="T:Transneft.WebService.Controllers.ElectricEnergyMeterController">
+            <summary>
+            Контроллер для работы с счетчиками электрической энергии
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.ElectricEnergyMeterController.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">Логгер</param>
+            <param name="service">Сервис для работы с БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.ElectricEnergyMeterController.Get(System.String)">
+            <summary>
+            GET CurTransformator (задание 1.2 п.3)
+            По указанному объекту потребления выбрать все счетчики с закончишившимся сроком проверки
+            </summary>
+            <param name="id">Id объекта потребления</param>
+            <returns>JSON-отклик</returns>
+        </member>
+        <member name="T:Transneft.WebService.Controllers.VoltTransformatorController">
+            <summary>
+            Контроллер для работы с трансформаторами напряжения
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.VoltTransformatorController.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">Логгер</param>
+            <param name="service">Сервис для работы с БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.VoltTransformatorController.Get(System.String)">
+            <summary>
+            GET CurTransformator (задание 1.2 п.4)
+            По указанному объекту потребления выбрать все трансформаторы напряжения с закончишившимся сроком проверки
+            </summary>
+            <param name="id">Id объекта потребления</param>
+            <returns>JSON-отклик</returns>
+        </member>
+        <member name="T:Transneft.WebService.Controllers.WebServiceControllerBase">
+            <summary>
+            Базовый класс контроллера
+            </summary>
+        </member>
+        <member name="P:Transneft.WebService.Controllers.WebServiceControllerBase.RequestId">
+            <summary>
+            Id запроса
+            </summary>
+        </member>
+        <member name="P:Transneft.WebService.Controllers.WebServiceControllerBase.Logger">
+            <summary>
+            Логгер 
+            </summary>
+        </member>
+        <member name="P:Transneft.WebService.Controllers.WebServiceControllerBase.QueryService">
+            <summary>
+            Сервис для работы с запросами к БД
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.WebServiceControllerBase.#ctor(Microsoft.Extensions.Logging.ILogger,Taransneft.Logic.Interfaces.IQueryService)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="logger">ILogger</param>
+            <param name="service">Сервис для работы с запросами к БД</param>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.WebServiceControllerBase.Log(System.String)">
+            <summary>
+            Записать лог контроллера
+            </summary>
+            <param name="msg">Сообщение</param>
+        </member>
+        <member name="T:Transneft.WebService.Helpers.DependencesInjection">
+            <summary>
+            Класс для добавления зависимостей
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Helpers.DependencesInjection.AddDependences(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Добавить зависимости
+            </summary>
+            <param name="services">IServiceCollection</param>
+        </member>
+        <member name="T:Transneft.WebService.Helpers.JsonParamFilter">
+            <summary>
+            Фильтр для проверки корректности JSON-параметра
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Helpers.JsonParamFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            Фильтр для проверки корректности JSON-параметра
+            </summary>
+            <param name="context">ActionExecutingContext</param>
+            <param name="next">ActionExecutingContext</param>
+        </member>
+        <member name="T:Transneft.WebService.Program">
+            <summary>
+            Основной класс приложения
+            </summary>
+        </member>
+        <member name="P:Transneft.WebService.Program.Configuration">
+            <summary>
+            Конфигурация
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Program.Main(System.String[])">
+            <summary>
+            Точка входа в приложение
+            </summary>
+            <param name="args">Аргументы</param>
+        </member>
+        <member name="M:Transneft.WebService.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            Создание WebHostBuilder
+            </summary>
+            <param name="args">Аргументы</param>
+            <returns>IWebHostBuilder</returns>
+        </member>
+        <member name="T:Transneft.WebService.Startup">
+            <summary>
+            Sturtup приложения
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services">IServiceCollection</param>
+        </member>
+        <member name="M:Transneft.WebService.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app">IApplicationBuilder</param>
+            <param name="env">IHostingEnvironment</param>
+            <param name="loggerFactory">ILoggerFactory</param>
+        </member>
+        <member name="M:Transneft.WebService.Startup.GetXmlCommentsPath">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

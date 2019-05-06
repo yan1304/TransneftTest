@@ -5,6 +5,9 @@ using Taransneft.Logic.Interfaces;
 
 namespace Transneft.WebService.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с счетчиками электрической энергии
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class ElectricEnergyMeterController : WebServiceControllerBase
@@ -17,10 +20,11 @@ namespace Transneft.WebService.Controllers
         public ElectricEnergyMeterController(ILogger logger, IQueryService service) : base(logger, service) { }
 
         /// <summary>
-        /// 
+        /// GET CurTransformator (задание 1.2 п.3)
+        /// По указанному объекту потребления выбрать все счетчики с закончишившимся сроком проверки
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id объекта потребления</param>
+        /// <returns>JSON-отклик</returns>
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {

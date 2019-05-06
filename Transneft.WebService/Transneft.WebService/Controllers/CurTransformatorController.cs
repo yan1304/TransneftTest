@@ -6,7 +6,7 @@ using Taransneft.Logic.Interfaces;
 namespace Transneft.WebService.Controllers
 {
     /// <summary>
-    /// 
+    /// Контроллер для работы с трансформаторами тока
     /// </summary>
     [ApiController]
     [Route("[controller]")]
@@ -20,10 +20,11 @@ namespace Transneft.WebService.Controllers
         public CurTransformatorController(ILogger logger, IQueryService service) : base(logger, service) { }
 
         /// <summary>
-        /// 
+        /// GET CurTransformator (задание 1.2 п.5)
+        /// По указанному объекту потребления выбрать все трансформаторы тока с закончишившимся сроком проверки
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id объекта потребления</param>
+        /// <returns>JSON-отклик</returns>
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {

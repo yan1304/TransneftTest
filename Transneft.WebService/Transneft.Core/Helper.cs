@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace Transneft.Core
 {
@@ -20,6 +22,28 @@ namespace Transneft.Core
         /// <param name="obj">Объект</param>
         /// <returns>Результат проверки</returns>
         public static bool IsNotNull(this object obj) => !obj.IsNull();
+
+        /// <summary>
+        /// Проверить, что строка пуста
+        /// </summary>
+        /// <param name="str">Строка</param>
+        /// <returns>Результат проверки</returns>
+        public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
+
+        /// <summary>
+        /// Проверить, что строка пуста или содержит пробельные символы
+        /// </summary>
+        /// <param name="str">Строка</param>
+        /// <returns>Результат проверки</returns>
+        public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
+
+        /// <summary>
+        /// Проверить, что id входит в массив
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <param name="ids">Массив</param>
+        /// <returns>Результат проверки</returns>
+        public static bool In(this Guid id, params Guid[] ids) => ids.Any(z => z == id);
 
         /// <summary>
         /// Конвертировать данные в JSON-строку
