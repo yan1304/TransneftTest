@@ -113,6 +113,17 @@
             <param name="id">Id объекта потребления</param>
             <returns>JSON-отклик</returns>
         </member>
+        <member name="T:Transneft.WebService.Controllers.ErrorController">
+            <summary>
+            Контроллер для ошибок
+            </summary>
+        </member>
+        <member name="M:Transneft.WebService.Controllers.ErrorController.Get">
+            <summary>
+            Метод не найден
+            </summary>
+            <returns>Отклик</returns>
+        </member>
         <member name="T:Transneft.WebService.Controllers.VoltTransformatorController">
             <summary>
             Контроллер для работы с трансформаторами напряжения

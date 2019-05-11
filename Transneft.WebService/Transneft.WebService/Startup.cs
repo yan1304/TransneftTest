@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,9 +24,12 @@ namespace Transneft.WebService
         {
             services.AddNodeServices();
             services.AddDbContext<TransneftDbContext>(options => options.UseSqlServer(Program.Configuration["ConnectionString"]));
-            services.AddMvc(options =>
+            services.AddMvc()
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .AddMvcOptions(o =>
             {
-                options.Filters.Add(new JsonParamFilter());
+                o.AllowEmptyInputInBodyModelBinding = true;
+                o.Filters.Add(new JsonParamFilter());
             });
 
             services.AddSwaggerGen(
