@@ -11,13 +11,22 @@ namespace Transneft.Model
         /// <summary>
         /// Guid точки измерения электроэнергии
         /// </summary>
-        public Guid PointGuid { get; set; }
+        public Guid CalcEnergyPointId { get; set; }
+
+        /// <summary>
+        /// Точка измерения электроэнергии
+        /// </summary>
+        public CalcEnergyPoint CalcEnergyPoint { get; set; }
 
         /// <summary>
         /// Guid расчетного прибора учёта
         /// </summary>
-        public Guid DeviceGuid { get; set; }
+        public Guid CalculatedDeviceId { get; set; }
 
+        /// <summary>
+        /// Расчетный прибора учёта
+        /// </summary>
+        public CalculatedDevice CalculatedDevice { get; set; }
         /// <summary>
         /// Дата начала связи
         /// </summary>

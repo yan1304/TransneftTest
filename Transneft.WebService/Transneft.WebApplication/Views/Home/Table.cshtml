@@ -1,25 +1,15 @@
 ﻿@model IEnumerable<TransneftObject>
 
 @{
-    ViewData["Title"] = "Table";
+    ViewData["Title"] = "Отображение данных";
 }
 
+@*Отобразить таблицу в зависимости от типа данных*@
 @if (Model is IEnumerable<CalculatedDevice>)
 {
-    <h2>Расчетные приборы учёта в 2018 году</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @await Component.InvokeAsync("CalculatedDeviceList", new { items = Model as IEnumerable<CalculatedDevice> })
+}
+else
+{
+    @await Component.InvokeAsync("ElectricEnergyMeterList", new { items = Model as IEnumerable<ElectricEnergyMeter> })
 }

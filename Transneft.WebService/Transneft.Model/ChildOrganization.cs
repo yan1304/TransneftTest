@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Transneft.Model.Base;
-using Transneft.Model.Interfaces;
 
 namespace Transneft.Model
 {
     /// <summary>
     /// Дочерняя организация
     /// </summary>
-    public class ChildOrganization : OrganizationBase, IHierarchy
+    public class ChildOrganization : OrganizationBase
     {
         /// <summary>
         /// Конструктор
@@ -18,7 +17,7 @@ namespace Transneft.Model
         /// <summary>
         /// Guid организации-владельца
         /// </summary>
-        public Guid ParentId { get; set; } 
+        public Guid OrganizationId { get; set; } 
 
         /// <summary>
         /// Организация-владелец

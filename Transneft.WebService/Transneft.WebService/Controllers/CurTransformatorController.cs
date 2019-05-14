@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using Taransneft.Logic.Interfaces;
+using Transneft.Logic.Contexts;
 
 namespace Transneft.WebService.Controllers
 {
@@ -17,7 +18,9 @@ namespace Transneft.WebService.Controllers
         /// </summary>
         /// <param name="logger">Логгер</param>
         /// <param name="service">Сервис для работы с БД</param>
-        public CurTransformatorController(ILogger logger, IQueryService service) : base(logger, service) { }
+        /// <param name="context">Контекст БД</param>
+        public CurTransformatorController(ILogger<CurTransformatorController> logger, IQueryService service, TransneftDbContext context)
+            : base(logger, service, context) { }
 
         /// <summary>
         /// GET CurTransformator (задание 1.2 п.5)
@@ -35,6 +38,30 @@ namespace Transneft.WebService.Controllers
                 var result = QueryService.GetDeadlinedCurTransformators(id);
                 Log("End QueryService.GetDeadlinedCurTransformators");
                 Log("End GET CurTransformator");
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                Log($"Ошибка: {ex.Message}");
+                return new BadRequestObjectResult($"Ошибка: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// GET CurTransformator
+        /// Выбрать все не используемые трансформаторы тока 
+        /// </summary>
+        /// <returns>JSON-отклик</returns>
+        [HttpGet]
+        public IActionResult Get()
+        {
+            Log("Start GET CurTransformator (All)");
+            try
+            {
+                Log("Start QueryService.GetDisabledCurTransformators");
+                var result = QueryService.GetDisabledCurTransformators();
+                Log("End QueryService.GetDisabledCurTransformators");
+                Log("End GET CurTransformator (All)");
                 return new JsonResult(result);
             }
             catch (Exception ex)

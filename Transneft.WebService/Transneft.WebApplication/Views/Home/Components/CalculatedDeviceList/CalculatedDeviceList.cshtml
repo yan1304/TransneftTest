@@ -1,1 +1,18 @@
 ﻿@model IEnumerable<CalculatedDevice>
+
+<h2>Расчетные приборы учёта в 2018 году</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            </tr>
+        }
+    </tbody>
+</table>

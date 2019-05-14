@@ -1,7 +1,52 @@
-﻿
+﻿@model IndexModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Transneft test - главная";
+}
+@{var id = string.Empty;}
+
+@if (Model.Message != null)
+{
+    <p>
+        Произошла ошибка: @Model.Message 
+    </p>
 }
 
-<h2>Index</h2>
+<h2>Выбор действия</h2>
+<div>
+    <p>
+        <a asp-controller="Home" asp-action="AddPoint">Добавить новую точку измерения</a>
+    </p>
+    <p>
+        <a asp-controller="Home" asp-action="Table">Выбрать все расчетные приборы учета в 2018 году</a>
+    </p>
+
+    <h3>Выбрать устройства с закончившимся сроком проверки</h3>
+    <form asp-action="Table" asp-controller="Home" method="get">
+        <div>
+            <label>Объект потребления</label>
+            <select name="Id">
+                @if (Model.ConsObjects != null)
+                {
+                    foreach (var item in Model.ConsObjects)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+            <br />
+
+            <label for="phone">Тип устройства:</label>
+            <select name="param">
+                <option value="0">Счетчики</option>
+                <option value="1">Трансформаторы тока</option>
+                <option value="2">Трансформаторы напряжения</option>
+            </select>
+            <br />
+
+            <div>
+                <input type="submit" value="Показать" />
+            </div>
+        </div>
+    </form>
+</div>
 

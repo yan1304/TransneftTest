@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using Transneft.Logic.Contexts;
 using Transneft.WebService.Helpers;
+using Microsoft.Extensions.Configuration;
 
 namespace Transneft.WebService
 {
@@ -22,8 +23,9 @@ namespace Transneft.WebService
         /// <param name="services">IServiceCollection</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDependences();
             services.AddNodeServices();
-            services.AddDbContext<TransneftDbContext>(options => options.UseSqlServer(Program.Configuration["ConnectionString"]));
+            services.AddDbContext<TransneftDbContext>(options =>  options.UseSqlServer(Program.Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
             .AddMvcOptions(o =>

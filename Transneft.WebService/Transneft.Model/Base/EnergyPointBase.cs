@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Transneft.Model.Interfaces;
 
 namespace Transneft.Model.Base
 {
     /// <summary>
     /// Базовый класс точки измерения/поставки электроэнергии
     /// </summary>
-    public abstract class EnergyPointBase : TransneftObject, IHierarchy
+    public abstract class EnergyPointBase : TransneftObject
     {
         /// <summary>
         /// Объект потребления
@@ -24,6 +23,6 @@ namespace Transneft.Model.Base
         /// <summary>
         /// Guid объекта потребления
         /// </summary>
-        public Guid ParentId { get; set; }
+        public Guid ConsObjectId { get; set; }
     }
 }

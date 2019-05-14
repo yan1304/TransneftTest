@@ -17,22 +17,16 @@ namespace Taransneft.Logic
         /// <summary>
         /// Контекст БД
         /// </summary>
-        private readonly TransneftDbContext _context;
-
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        /// <param name="ctx">Контекст БД</param>
-        public QueryService(TransneftDbContext ctx)
-        {
-            _context = ctx;
-        }
+        public TransneftDbContext Context { get; set; }
 
         /// <summary>
         /// Добавить новую точку измерения с указанием счетчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="json">JSON-данные для добавления</param>
-        public async Task AddCalcEnergyPoint(string json)
+        /// <param name="energyMeterId">Id счетчика электрической энергии</param>
+        /// <param name="curTrId">Id трансформатора тока</param>
+        /// <param name="voltTrId">Id трансформатора напряжения</param>
+        public async Task AddCalcEnergyPoint(string json, string energyMeterId, string curTrId, string voltTrId)
         {
             if (json.IsNullOrWhiteSpace())
             {
@@ -44,25 +38,47 @@ namespace Taransneft.Logic
             {
                 throw new Exception("Отсутствует параметр Name!");
             }
-            else if (_context.CalcEnergyPoints.Any(z => z.Name == param.Name))
+            else if (Context.CalcEnergyPoints.Any(z => z.Name == param.Name))
             {
                 throw new Exception($"Точка измерения электроэнергии с именем {param.Name} уже существует!");
             }
-            else if (param.VoltTransformator.IsNull())
+            else if (energyMeterId.IsNullOrWhiteSpace())
             {
-                throw new Exception("Отсутствует параметр VoltTransformator!");
+                throw new Exception("Отсутствует параметр energyMeterId!");
             }
-            else if (param.CurTransformator.IsNull())
+            else if (curTrId.IsNullOrWhiteSpace())
             {
-                throw new Exception("Отсутствует параметр CurTransformator!");
+                throw new Exception("Отсутствует параметр curTrId!");
             }
-            else if (param.ElectricEnergyMeter.IsNull())
+            else if (voltTrId.IsNullOrWhiteSpace())
             {
-                throw new Exception("Отсутствует параметр ElectricEnergyMeter!");
+                throw new Exception("Отсутствует параметр voltTrId!");
             }
-            
-            await _context.CalcEnergyPoints.AddAsync(param);
-            await _context.SaveChangesAsync();
+
+            if (!Guid.TryParse(energyMeterId, out var energytMeter))
+            {
+                throw new Exception("Некорректный параметр energyMeterId!");
+            }
+
+            if (!Guid.TryParse(curTrId, out var curTr))
+            {
+                throw new Exception("Некорректный параметр curTrId!");
+            }
+
+            if (!Guid.TryParse(voltTrId, out var voltTr))
+            {
+                throw new Exception("Некорректный параметр voltTrId!");
+            }
+
+            param.ElectricEnergyMeter = Context.ElectricEnergyMeters
+                .FirstOrDefault(z => z.Id == energytMeter) ?? throw new Exception("Некорректный параметр energyMeterId!");
+            param.CurTransformator = Context.CurTransformators
+                .FirstOrDefault(z => z.Id == curTr) ?? throw new Exception("Некорректный параметр curTrId!");
+            param.VoltTransformator = Context.VoltTransformators
+                .FirstOrDefault(z => z.Id == voltTr) ?? throw new Exception("Некорректный параметр voltTrId!");
+
+            await Context.CalcEnergyPoints.AddAsync(param);
+            await Context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -77,12 +93,12 @@ namespace Taransneft.Logic
                 throw new Exception("Указан некорректный год");
             }
 
-            var deviceIds = _context.CalcPointAndDevices
+            var deviceIds = Context.CalcPointAndDevices
                 .Where(z => z.DateFrom.Year <= year && z.DateTo.Year >= year)
-                .Select(z => z.DeviceGuid)
+                .Select(z => z.CalculatedDeviceId)
                 .ToArray();
 
-            return _context.CalculatedDevices
+            return Context.CalculatedDevices
                 .Where(z => z.Id.In(deviceIds))
                 .ToArray();
         }
@@ -99,14 +115,14 @@ namespace Taransneft.Logic
 
             // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
             var energyMeters = obj.CalcEnergyPoints.Select(z => z.ElectricEnergyMeter).ToArray();
-            var deadlinedPoints = _context.CalcPointAndDevices
-                .Where(z => z.PointGuid.In(energyMeters.Select(x => x.ParentId).ToArray()))
-                .GroupBy(z => z.PointGuid)
+            var deadlinedPoints = Context.CalcPointAndDevices
+                .Where(z => z.CalcEnergyPointId.In(energyMeters.Select(x => x.CalcEnergyPointId).ToArray()))
+                .GroupBy(z => z.CalcEnergyPointId)
                 .Where(z => z.Max(x => x.DateTo < DateTime.Now))
                 .Select(z => z.Key)
                 .ToArray();
 
-            return energyMeters.Where(z => z.ParentId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
+            return energyMeters.Where(z => z.CalcEnergyPointId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
         }
 
         /// <summary>
@@ -121,14 +137,14 @@ namespace Taransneft.Logic
 
             // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
             var voltTransformators = obj.CalcEnergyPoints.Select(z => z.VoltTransformator).ToArray();
-            var deadlinedPoints = _context.CalcPointAndDevices
-                .Where(z => z.PointGuid.In(voltTransformators.Select(x => x.ParentId).ToArray()))
-                .GroupBy(z => z.PointGuid)
+            var deadlinedPoints = Context.CalcPointAndDevices
+                .Where(z => z.CalcEnergyPointId.In(voltTransformators.Select(x => x.CalcEnergyPointId).ToArray()))
+                .GroupBy(z => z.CalcEnergyPointId)
                 .Where(z => z.Max(x => x.DateTo < DateTime.Now))
                 .Select(z => z.Key)
                 .ToArray();
 
-            return voltTransformators.Where(z => z.ParentId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
+            return voltTransformators.Where(z => z.CalcEnergyPointId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
         }
 
         /// <summary>
@@ -143,21 +159,59 @@ namespace Taransneft.Logic
 
             // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
             var curTransformators = obj.CalcEnergyPoints.Select(z => z.CurTransformator).ToArray();
-            var deadlinedPoints = _context.CalcPointAndDevices
-                .Where(z => z.PointGuid.In(curTransformators.Select(x => x.ParentId).ToArray()))
-                .GroupBy(z => z.PointGuid)
+            var deadlinedPoints = Context.CalcPointAndDevices
+                .Where(z => z.CalcEnergyPointId.In(curTransformators.Select(x => x.CalcEnergyPointId).ToArray()))
+                .GroupBy(z => z.CalcEnergyPointId)
                 .Where(z => z.Max(x => x.DateTo < DateTime.Now))
                 .Select(z => z.Key)
                 .ToArray();
 
-            return curTransformators.Where(z => z.ParentId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
+            return curTransformators.Where(z => z.CalcEnergyPointId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
         }
 
         /// <summary>
-        /// Получить все дочерние организации
+        /// Получить все дочерние организации (id и имя)
         /// </summary>
-        /// <returns>Дочерние организации</returns>
-        public IEnumerable<ChildOrganization> GetAllChildOrganizations() => _context.ChildOrganizations.ToArray();
+        /// <returns>Id и имя</returns>
+        public IEnumerable<ItemInfo> GetAllChildOrganizations() 
+            => Context.ChildOrganizations
+            .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Name })
+            .ToArray();
+
+        /// <summary>
+        /// Получить все не используемые счетчики электроэнергии (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        public IEnumerable<ItemInfo> GetDisabledElectricEnergyMeters()
+            => Context.ElectricEnergyMeters
+            .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Number })
+            .ToArray();
+
+        /// <summary>
+        /// Получить все не используемые трансформаторы тока (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        public IEnumerable<ItemInfo> GetDisabledCurTransformators()
+            => Context.CurTransformators
+            .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Number })
+            .ToArray();
+
+        /// <summary>
+        /// Получить все не используемые трансформаторы напряжения (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        public IEnumerable<ItemInfo> GetDisabledVoltTransformators()
+            => Context.VoltTransformators
+            .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Number })
+            .ToArray();
+
+        /// <summary>
+        /// Получить все объекты потребления (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        public IEnumerable<ItemInfo> GetAllConsObjects() => Context.ConsObjects
+            .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Name })
+            .ToArray();
 
         /// <summary>
         /// Получить Id объекта потребления из строки
@@ -173,7 +227,7 @@ namespace Taransneft.Logic
         /// </summary>
         /// <param name="id">Guid</param>
         private ConsObject GetConsObject(Guid id)
-            => _context.ConsObjects.FirstOrDefault(z => z.Id == id)
+            => Context.ConsObjects.FirstOrDefault(z => z.Id == id)
                 ?? throw new Exception($"Не найден объект потребления с Id = {id}");
     }
 }

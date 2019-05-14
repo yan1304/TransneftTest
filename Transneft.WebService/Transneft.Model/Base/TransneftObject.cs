@@ -21,7 +21,7 @@ namespace Transneft.Model.Base
         [Key]
         [HiddenInput(DisplayValue = false)]
         [Display(Name = "Id")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; }
     }
 }

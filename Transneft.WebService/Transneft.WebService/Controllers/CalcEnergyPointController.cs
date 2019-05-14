@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Taransneft.Logic.Interfaces;
+using Transneft.Logic.Contexts;
 
 namespace Transneft.WebService.Controllers
 {
@@ -18,16 +19,21 @@ namespace Transneft.WebService.Controllers
         /// </summary>
         /// <param name="logger">Логгер</param>
         /// <param name="service">Сервис для работы с БД</param>
-        public CalcEnergyPointController(ILogger logger, IQueryService service) : base(logger, service) { }
+        /// <param name="context">Контекст БД</param>
+        public CalcEnergyPointController(ILogger<CalcEnergyPointController> logger, IQueryService service, TransneftDbContext context) 
+            : base(logger, service, context) { }
 
         /// <summary>
         /// POST CalcEnergyPoint (задание 1.2 п.1)
         /// Добавить новую точку измерения напряжения с указанием счётчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="data">CalcEnergyPoint в json-формате</param>
+        /// <param name="energyMeterId">Id счетчика электрической энергии</param>
+        /// <param name="curTrId">Id трансформатора тока</param>
+        /// <param name="voltTrId">Id трансформатора напряжения</param>
         /// <returns>JSON-отклик</returns>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] object data)
+        [HttpPost("{energyMeterId}/{curTrId}/{voltTrId}")]
+        public async Task<IActionResult> Post([FromBody] object data, string energyMeterId, string curTrId, string voltTrId)
         {
             Log("Start POST CalcEnergyPoint");
             try
@@ -35,7 +41,7 @@ namespace Transneft.WebService.Controllers
                 var json = $"{data}";
                 Log($"Param: {json}");
                 Log("Start QueryService.AddCalcEnergyPoint");
-                await QueryService.AddCalcEnergyPoint(json);
+                await QueryService.AddCalcEnergyPoint(json, energyMeterId, curTrId, voltTrId);
                 Log("End QueryService.AddCalcEnergyPoint");
                 Log("End POST CalcEnergyPoint");
                 return new JsonResult("OK");

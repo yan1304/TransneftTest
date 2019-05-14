@@ -1,4 +1,6 @@
 {
-  "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=TransneftTest;Trusted_Connection=True;",
-  "ServicePort": "8050"
-}
+  "ConnectionStrings": {
+      "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TransneftTest;Trusted_Connection=True;"
+    },
+    "ServicePort": "8050"
+  }

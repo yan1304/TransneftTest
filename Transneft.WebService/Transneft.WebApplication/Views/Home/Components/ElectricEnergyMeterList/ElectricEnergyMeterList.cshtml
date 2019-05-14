@@ -1,1 +1,61 @@
-﻿@model IEnumerable<ElectricEnergyMeter>
+﻿@model IEnumerable<DeviceBase>
+@if (Model is IEnumerable<VoltTransformator>)
+{
+    <h2>Трансформаторы напряжения с закончившимся сроком проверки</h2>
+}
+else if (Model is IEnumerable<CurTransformator>)
+{
+    <h2>Трансформаторы тока с закончившимся сроком проверки</h2>
+}
+else
+{
+    <h2>Счетчики с закончившимся сроком проверки</h2>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер</th>
+
+            @if (Model is IEnumerable<VoltTransformator>)
+            {
+                <th>Тип трансформатора напряжения</th>
+            }
+            else if (Model is IEnumerable<CurTransformator>)
+            {
+                <th>Тип трансформатора тока</th>
+            }
+            else
+            {
+                <th>Тип счётчика</th>
+            }
+
+            <th>Дата проверки</th>
+
+            @if (Model is IEnumerable<CurTransformator>)
+            {
+                <th>КТТ (коэффицент трансформации)</th>
+            }
+            else if (Model is IEnumerable<VoltTransformator>)
+            {
+                <th>КТН (коэффицент трансформации)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Number)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CheckDate)</td>
+                    @if (item is Transformator && item != null)
+                    {
+                        <td>@(item as Transformator).KT</td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

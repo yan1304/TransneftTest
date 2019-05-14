@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Transneft.Logic.Contexts;
 using Transneft.Model;
 
 namespace Taransneft.Logic.Interfaces
@@ -11,10 +12,18 @@ namespace Taransneft.Logic.Interfaces
     public interface IQueryService
     {
         /// <summary>
+        /// Контекст БД
+        /// </summary>
+        TransneftDbContext Context { get; set; }
+
+        /// <summary>
         /// Добавить новую точку измерения с указанием счетчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="json">JSON-данные для добавления</param>
-        Task AddCalcEnergyPoint(string json);
+        /// <param name="energyMeterId">Id счетчика электрической энергии</param>
+        /// <param name="curTrId">Id трансформатора тока</param>
+        /// <param name="voltTrId">Id трансформатора напряжения</param>
+        Task AddCalcEnergyPoint(string json, string energyMeterId, string curTrId, string voltTrId);
 
         /// <summary>
         /// Выбрать все расчетные приборы в year году
@@ -45,9 +54,33 @@ namespace Taransneft.Logic.Interfaces
         IEnumerable<CurTransformator> GetDeadlinedCurTransformators(string consObjectId);
 
         /// <summary>
-        /// Получить все дочерние организации
+        /// Получить все дочерние организации (id и имя)
         /// </summary>
-        /// <returns>Дочерние организации</returns>
-        IEnumerable<ChildOrganization> GetAllChildOrganizations();
+        /// <returns>Id и имя</returns>
+        IEnumerable<ItemInfo> GetAllChildOrganizations();
+
+        /// <summary>
+        /// Получить все не используемые счетчики электроэнергии (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        IEnumerable<ItemInfo> GetDisabledElectricEnergyMeters();
+
+        /// <summary>
+        /// Получить все не используемые трансформаторы тока (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        IEnumerable<ItemInfo> GetDisabledCurTransformators();
+
+        /// <summary>
+        /// Получить все не используемые трансформаторы напряжения (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        IEnumerable<ItemInfo> GetDisabledVoltTransformators();
+
+        /// <summary>
+        /// Получить все объекты потребления (id и имя)
+        /// </summary>
+        /// <returns>Id и имя</returns>
+        IEnumerable<ItemInfo> GetAllConsObjects();
     }
 }

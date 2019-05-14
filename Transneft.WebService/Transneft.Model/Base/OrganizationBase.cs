@@ -19,6 +19,6 @@ namespace Transneft.Model.Base
         /// </summary>
         [Required]
         [Display(Name = "Адрес")]
-        public string Adress { get; set; }
+        public string Address { get; set; }
     }
 }

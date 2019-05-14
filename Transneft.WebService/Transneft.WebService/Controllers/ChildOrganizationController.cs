@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using Taransneft.Logic.Interfaces;
+using Transneft.Logic.Contexts;
 
 namespace Transneft.WebService.Controllers
 {
@@ -17,15 +18,17 @@ namespace Transneft.WebService.Controllers
         /// </summary>
         /// <param name="logger">Логгер</param>
         /// <param name="service">Сервис для работы с БД</param>
-        public ChildOrganizationController(ILogger logger, IQueryService service) : base(logger, service) { }
+        /// <param name="context">Контекст БД</param>
+        public ChildOrganizationController(ILogger<ChildOrganizationController> logger, IQueryService service, TransneftDbContext context) 
+            : base(logger, service, context) { }
 
         /// <summary>
-        /// GET ChildOrganization (задание 1.2 п.5)
-        /// Получить дочерние организации
+        /// GET ChildOrganization
+        /// Получить все дочерние организации
         /// </summary>
         /// <returns>JSON-отклик</returns>
-        [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        [HttpGet]
+        public IActionResult Get()
         {
             Log("Start GET ChildOrganization");
             try

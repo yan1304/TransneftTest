@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Transneft.Model.Base;
-using Transneft.Model.Interfaces;
 
 namespace Transneft.Model
 {

@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using Taransneft.Logic.Interfaces;
-using Transneft.Logic.Interfaces;
+using Transneft.Core;
+using Transneft.Logic;
+using Transneft.Logic.Contexts;
 
 namespace Transneft.WebService.Controllers
 {
@@ -20,7 +22,7 @@ namespace Transneft.WebService.Controllers
         /// <summary>
         /// Логгер 
         /// </summary>
-        protected ILog Logger { get; set; }
+        protected Log Logger { get; set; }
 
         /// <summary>
         /// Сервис для работы с запросами к БД
@@ -32,11 +34,12 @@ namespace Transneft.WebService.Controllers
         /// </summary>
         /// <param name="logger">ILogger</param>
         /// <param name="service">Сервис для работы с запросами к БД</param>
-        public WebServiceControllerBase(ILogger logger, IQueryService service)
+        /// <param name="context">Контекст БД</param>
+        public WebServiceControllerBase(ILogger<WebServiceControllerBase> logger, IQueryService service, TransneftDbContext context)
         {
-            Logger = HttpContext.RequestServices.GetRequiredService<ILog>();
-            Logger.Logger = logger;
+            Logger = new Log(logger);
             QueryService = service;
+            QueryService.Context = context;
             RequestId = Guid.NewGuid();
         }
 

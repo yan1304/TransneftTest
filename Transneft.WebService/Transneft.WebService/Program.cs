@@ -26,7 +26,7 @@ namespace Transneft.WebService
             Configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                                                       .AddJsonFile("settings.json", true)
                                                       .Build();
-            TransneftDbContext.ConnectionString = Configuration["ConnectionString"];
+            //TransneftDbContext.ConnectionString = Configuration.["ConnectionString"];
             CreateWebHostBuilder(args).Build().Run();
         }
 

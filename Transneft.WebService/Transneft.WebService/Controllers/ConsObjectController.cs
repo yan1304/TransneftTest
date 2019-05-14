@@ -7,11 +7,11 @@ using Transneft.Logic.Contexts;
 namespace Transneft.WebService.Controllers
 {
     /// <summary>
-    /// Контроллер для работы с расчетными приборами учета
+    /// Контроллер для работы с объектами потребления
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class CalculatedDeviceController : WebServiceControllerBase
+    public class ConsObjectController : WebServiceControllerBase
     {
         /// <summary>
         /// Конструктор
@@ -19,24 +19,24 @@ namespace Transneft.WebService.Controllers
         /// <param name="logger">Логгер</param>
         /// <param name="service">Сервис для работы с БД</param>
         /// <param name="context">Контекст БД</param>
-        public CalculatedDeviceController(ILogger<CalculatedDeviceController> logger, IQueryService service, TransneftDbContext context)
+        public ConsObjectController(ILogger<ConsObjectController> logger, IQueryService service, TransneftDbContext context)
             : base(logger, service, context) { }
 
         /// <summary>
-        /// GET CalculatedDevice (задание 1.2 п.2)
-        /// Выбрать все расчетные приборы в 2018 году
+        /// GET ConsObject
+        /// Получить все объекты потребления
         /// </summary>
         /// <returns>JSON-отклик</returns>
         [HttpGet]
         public IActionResult Get()
         {
-            Log("Start GET CalculatedDevice");
+            Log("Start GET ConsObject");
             try
             {
-                Log("Start QueryService.GetCalculatedDevices");
-                var result = QueryService.GetCalculatedDevices(2018);
-                Log("End QueryService.GetCalculatedDevices");
-                Log("End GET CalculatedDevice");
+                Log("Start QueryService.GetAllConsObjects");
+                var result = QueryService.GetAllConsObjects();
+                Log("End QueryService.GetAllConsObjects");
+                Log("End GET ConsObject");
                 return new JsonResult(result);
             }
             catch (Exception ex)
