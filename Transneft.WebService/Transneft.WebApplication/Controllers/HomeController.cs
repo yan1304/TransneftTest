@@ -39,12 +39,7 @@ namespace Transneft.WebApplication.Controllers
 
                 using (var client = new HttpClient { BaseAddress = new Uri("http://localhost:8050") })
                 {
-                    var resp = await client.SendAsync(
-                        new HttpRequestMessage
-                        {
-                            Method = HttpMethod.Get,
-                            RequestUri = new Uri($"{client.BaseAddress}/ConsObject")
-                        });
+                    var resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "ConsObject"));
                     if (resp.IsSuccessStatusCode)
                     {
                         param.ConsObjects = (await resp.Content.ReadAsStringAsync()).FromJson<ItemInfo[]>();
@@ -73,12 +68,7 @@ namespace Transneft.WebApplication.Controllers
             {
                 using (var client = new HttpClient { BaseAddress = new Uri("http://localhost:8050") })
                 {
-                    var resp = await client.SendAsync(
-                        new HttpRequestMessage
-                        {
-                            Method = HttpMethod.Get,
-                            RequestUri = new Uri($"{client.BaseAddress}/CalculatedDevice")
-                        });
+                    var resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "CalculatedDevice"));
                     if (resp.IsSuccessStatusCode)
                     {
                         return View((await resp.Content.ReadAsStringAsync()).FromJson<CalculatedDevice[]>());
@@ -112,28 +102,13 @@ namespace Transneft.WebApplication.Controllers
                     switch (param.Type)
                     {
                         case TypeDevice.ElectricEnergyMeter:
-                            resp = await client.SendAsync(
-                                new HttpRequestMessage
-                                {
-                                    Method = HttpMethod.Get,
-                                    RequestUri = new Uri($"{client.BaseAddress}/ElectricEnergyMeter/{param.Id}")
-                                });
+                            resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"ElectricEnergyMeter/{param.Id}"));
                             break;
                         case TypeDevice.CurTransformator:
-                            resp = await client.SendAsync(
-                                new HttpRequestMessage
-                                {
-                                    Method = HttpMethod.Get,
-                                    RequestUri = new Uri($"{client.BaseAddress}/CurTransformator/{param.Id}")
-                                });
+                            resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"CurTransformator/{param.Id}"));
                             break;
                         case TypeDevice.VoltTransformator:
-                            resp = await client.SendAsync(
-                                new HttpRequestMessage
-                                {
-                                    Method = HttpMethod.Get,
-                                    RequestUri = new Uri($"{client.BaseAddress}/VoltTransformator/{param.Id}")
-                                });
+                            resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"VoltTransformator/{param.Id}"));
                             break;
                     }
 
@@ -175,12 +150,7 @@ namespace Transneft.WebApplication.Controllers
                 var pointParam = new AddCalcEnergyPoint();
                 using (var client = new HttpClient { BaseAddress = new Uri("http://localhost:8050") })
                 {
-                    var req = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Get,
-                        RequestUri = new Uri($"{client.BaseAddress}/ChildOrganization")
-                    };
-
+                    var req = new HttpRequestMessage(HttpMethod.Get, "ConsObject");
                     var resp = await client.SendAsync(req);
                     if (!resp.IsSuccessStatusCode)
                     {
@@ -188,7 +158,7 @@ namespace Transneft.WebApplication.Controllers
                     }
 
                     pointParam.ChildOrganizations = (await resp.Content.ReadAsStringAsync()).FromJson<ItemInfo[]>();
-                    req.RequestUri = new Uri($"{client.BaseAddress}/ElectricEnergyMeter");
+                    req = new HttpRequestMessage(HttpMethod.Get, "ElectricEnergyMeter");
                     resp = await client.SendAsync(req);
                     if (!resp.IsSuccessStatusCode)
                     {
@@ -196,7 +166,7 @@ namespace Transneft.WebApplication.Controllers
                     }
 
                     pointParam.ElectricEnergyMeters = (await resp.Content.ReadAsStringAsync()).FromJson<ItemInfo[]>();
-                    req.RequestUri = new Uri($"{client.BaseAddress}/CurTransformator");
+                    req = new HttpRequestMessage(HttpMethod.Get, "CurTransformator");
                     resp = await client.SendAsync(req);
                     if (!resp.IsSuccessStatusCode)
                     {
@@ -204,7 +174,7 @@ namespace Transneft.WebApplication.Controllers
                     }
 
                     pointParam.CurTransformators = (await resp.Content.ReadAsStringAsync()).FromJson<ItemInfo[]>();
-                    req.RequestUri = new Uri($"{client.BaseAddress}/VoltTransformator");
+                    req = new HttpRequestMessage(HttpMethod.Get, "VoltTransformator");
                     resp = await client.SendAsync(req);
                     if (!resp.IsSuccessStatusCode)
                     {
@@ -234,19 +204,19 @@ namespace Transneft.WebApplication.Controllers
             {
                 var engPoint = new CalcEnergyPoint
                 {
+                    Id = Guid.NewGuid(),
                     Name = point.Name,
                     ConsObjectId = Guid.Parse(point.ChildOrganizationId),
+                    ElectricEnergyMeterId = Guid.Parse(point.EnergyMeterId),
+                    VoltTransformatorId = Guid.Parse(point.VoltTransId),
+                    CurTransformatorId = Guid.Parse(point.CurTransId)
                 };
 
                 using (var client = new HttpClient() { BaseAddress = new Uri("http://localhost:8050") })
                 {
-                    var req = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Post,
-                        RequestUri = new Uri($"{client.BaseAddress}/CalcEnergyPoint/{point.ElectricEnergyMeterId}/{point.CurTransformatorId}/{point.VoltTransformatorId}")
-                    };
-
-                    req.Content = new StringContent(engPoint.ToJson(), Encoding.Unicode);
+                    var req = new HttpRequestMessage(HttpMethod.Post, "CalcEnergyPoint");
+                    var js = engPoint.ToJson();
+                    req.Content = new StringContent(engPoint.ToJson(), Encoding.UTF8, "application/json");
                     var resp = await client.SendAsync(req);
                     if (resp.IsSuccessStatusCode)
                     {

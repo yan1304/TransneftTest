@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using Transneft.Core;
 using Transneft.Model;
 
 namespace Transneft.Logic.Contexts
@@ -14,15 +13,6 @@ namespace Transneft.Logic.Contexts
         /// Конструктор
         /// </summary>
         public TransneftDbContext(DbContextOptions<TransneftDbContext> options) : base(options) => Database.EnsureCreated();
-
-        ///// <summary>
-        ///// Конструктор класса
-        ///// </summary>
-        ///// <param name="connectionString">Строка подключения</param>
-        //public TransneftDbContext(string connectionString = null)
-        //{
-        //    Database.EnsureCreated();
-        //}
 
         /// <summary>
         /// Строка подключения
@@ -172,6 +162,13 @@ namespace Transneft.Logic.Contexts
                     Number = "МС1002",
                     Type = "Тестовый тип",
                     CheckDate = new DateTime(2018, 5, 1)
+                },
+                new ElectricEnergyMeter
+                {
+                    Id = Guid.NewGuid(),
+                    Number = "МС2002",
+                    Type = "Тестовый тип (связи нет)",
+                    CheckDate = new DateTime(2018, 5, 1)
                 });
 
             modelBuilder.Entity<CurTransformator>().HasData(
@@ -189,6 +186,13 @@ namespace Transneft.Logic.Contexts
                     Number = "МТ1002",
                     Type = "Тестовый тип",
                     KT = 0.89d
+                },
+                new CurTransformator
+                {
+                    Id = Guid.NewGuid(),
+                    Number = "МТ2002",
+                    Type = "Тестовый тип (связи нет)",
+                    KT = 1.89d
                 });
 
             modelBuilder.Entity<VoltTransformator>().HasData(
@@ -205,6 +209,14 @@ namespace Transneft.Logic.Contexts
                     Id = vId2,
                     Number = "МН1002",
                     Type = "Тестовый тип",
+                    KT = 0.04d,
+                    CheckDate = new DateTime(2018, 1, 1)
+                },
+                new VoltTransformator
+                {
+                    Id = Guid.NewGuid(),
+                    Number = "МН2002",
+                    Type = "Тестовый тип (связи нет)",
                     KT = 0.04d,
                     CheckDate = new DateTime(2018, 1, 1)
                 });
@@ -247,12 +259,6 @@ namespace Transneft.Logic.Contexts
                     DateTo = new DateTime(2019, 2, 2)
                 });
         }
-
-        ///// <summary>
-        ///// Настройка подключения к базе данных
-        ///// </summary>
-        ///// <param name="optionsBuilder">DbContextOptionsBuilder</param>
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(ConnectionString);
 
         /// <summary>
         /// Добавить в модель связи

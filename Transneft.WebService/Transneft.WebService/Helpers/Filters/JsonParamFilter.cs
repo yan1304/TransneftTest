@@ -19,11 +19,12 @@ namespace Transneft.WebService.Helpers
             ActionExecutingContext context,
             ActionExecutionDelegate next)
         {
-            var resultContext = await next();
-            if (resultContext.HttpContext.Response.StatusCode == 502)
+            if (!context.ModelState.IsValid)
             {
-                resultContext.Result = new BadRequestObjectResult("Некорректный JSON-параметр");
+                context.Result = new BadRequestObjectResult("Некорректный JSON-параметр");
             }
+
+            await next.Invoke();
         }
     }
 }

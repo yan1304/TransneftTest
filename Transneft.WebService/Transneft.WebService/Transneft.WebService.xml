@@ -17,15 +17,12 @@
             <param name="service">Сервис для работы с БД</param>
             <param name="context">Контекст БД</param>
         </member>
-        <member name="M:Transneft.WebService.Controllers.CalcEnergyPointController.Post(System.Object,System.String,System.String,System.String)">
+        <member name="M:Transneft.WebService.Controllers.CalcEnergyPointController.Post(System.Object)">
             <summary>
             POST CalcEnergyPoint (задание 1.2 п.1)
             Добавить новую точку измерения напряжения с указанием счётчика, трансформатора тока и трансформатора напряжения
             </summary>
             <param name="data">CalcEnergyPoint в json-формате</param>
-            <param name="energyMeterId">Id счетчика электрической энергии</param>
-            <param name="curTrId">Id трансформатора тока</param>
-            <param name="voltTrId">Id трансформатора напряжения</param>
             <returns>JSON-отклик</returns>
         </member>
         <member name="T:Transneft.WebService.Controllers.CalculatedDeviceController">
@@ -45,26 +42,6 @@
             <summary>
             GET CalculatedDevice (задание 1.2 п.2)
             Выбрать все расчетные приборы в 2018 году
-            </summary>
-            <returns>JSON-отклик</returns>
-        </member>
-        <member name="T:Transneft.WebService.Controllers.ChildOrganizationController">
-            <summary>
-            Контроллер для работы с дочерними организациями
-            </summary>
-        </member>
-        <member name="M:Transneft.WebService.Controllers.ChildOrganizationController.#ctor(Microsoft.Extensions.Logging.ILogger{Transneft.WebService.Controllers.ChildOrganizationController},Taransneft.Logic.Interfaces.IQueryService,Transneft.Logic.Contexts.TransneftDbContext)">
-            <summary>
-            Конструктор
-            </summary>
-            <param name="logger">Логгер</param>
-            <param name="service">Сервис для работы с БД</param>
-            <param name="context">Контекст БД</param>
-        </member>
-        <member name="M:Transneft.WebService.Controllers.ChildOrganizationController.Get">
-            <summary>
-            GET ChildOrganization
-            Получить все дочерние организации
             </summary>
             <returns>JSON-отклик</returns>
         </member>

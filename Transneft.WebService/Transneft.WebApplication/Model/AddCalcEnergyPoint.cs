@@ -29,22 +29,22 @@ namespace Transneft.WebApplication.Model
         public IEnumerable<ItemInfo> ChildOrganizations { get; set; }
 
         /// <summary>
-        /// Список счетчиков электрической энергии
+        /// Id Список счетчика электрической энергии
         /// </summary>
-        public new string ElectricEnergyMeterId { get; set; }
+        public string EnergyMeterId { get; set; }
 
         /// <summary>
-        /// Список трансформаторов тока
+        /// Id Список трансформатора тока
         /// </summary>
-        public new string CurTransformatorId { get; set; }
+        public string CurTransId { get; set; }
 
         /// <summary>
-        /// Список трансформаторов напряжения
+        /// Id трансформатора напряжения
         /// </summary>
-        public new string VoltTransformatorId { get; set; }
+        public string VoltTransId { get; set; }
 
         /// <summary>
-        /// Список дочерняя организация
+        /// Id дочерней организации
         /// </summary>
         public string ChildOrganizationId { get; set; }
     }

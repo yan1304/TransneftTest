@@ -21,8 +21,7 @@
     </p>
 
     <h3>Выбрать устройства с закончившимся сроком проверки</h3>
-    <form asp-action="Table" asp-controller="Home" method="get">
-        <div>
+    <form asp-action="Table" asp-controller="Home" method="post">
             <label>Объект потребления</label>
             <select name="Id">
                 @if (Model.ConsObjects != null)
@@ -35,18 +34,15 @@
             </select>
             <br />
 
-            <label for="phone">Тип устройства:</label>
-            <select name="param">
+            <label for="param">Тип устройства:</label>
+            <select name="Type">
                 <option value="0">Счетчики</option>
                 <option value="1">Трансформаторы тока</option>
                 <option value="2">Трансформаторы напряжения</option>
             </select>
             <br />
 
-            <div>
-                <input type="submit" value="Показать" />
-            </div>
-        </div>
+            <button type="submit" value="Получить" />
     </form>
 </div>
 

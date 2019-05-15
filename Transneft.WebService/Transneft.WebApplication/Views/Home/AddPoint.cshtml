@@ -27,7 +27,7 @@
             <br />
 
             <label>Счётчик электрической энергии</label>
-            <select name="ElecticEnergyMeterId">
+            <select name="EnergyMeterId">
                 @if (Model.ElectricEnergyMeters != null)
                 {
                     foreach (var item in Model.ElectricEnergyMeters)
@@ -39,7 +39,7 @@
             <br />
 
             <label>Трансформатор тока</label>
-            <select name="CurTransformatorId">
+            <select name="CurTransId">
                 @if (Model.CurTransformators != null)
                 {
                     foreach (var item in Model.CurTransformators)
@@ -51,7 +51,7 @@
             <br />
 
             <label>Трансформатор напряжения</label>
-            <select name="VoltTransformatorId">
+            <select name="VoltTransId">
                 @if (Model.VoltTransformators != null)
                 {
                     foreach (var item in Model.VoltTransformators)

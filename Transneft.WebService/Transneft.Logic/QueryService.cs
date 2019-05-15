@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,10 +24,7 @@ namespace Taransneft.Logic
         /// Добавить новую точку измерения с указанием счетчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="json">JSON-данные для добавления</param>
-        /// <param name="energyMeterId">Id счетчика электрической энергии</param>
-        /// <param name="curTrId">Id трансформатора тока</param>
-        /// <param name="voltTrId">Id трансформатора напряжения</param>
-        public async Task AddCalcEnergyPoint(string json, string energyMeterId, string curTrId, string voltTrId)
+        public void AddCalcEnergyPoint(string json)
         {
             if (json.IsNullOrWhiteSpace())
             {
@@ -42,43 +40,33 @@ namespace Taransneft.Logic
             {
                 throw new Exception($"Точка измерения электроэнергии с именем {param.Name} уже существует!");
             }
-            else if (energyMeterId.IsNullOrWhiteSpace())
+            else if (param.ElectricEnergyMeterId.IsNull())
             {
-                throw new Exception("Отсутствует параметр energyMeterId!");
+                throw new Exception("Отсутствует параметр ElectricEnergyMeterId!");
             }
-            else if (curTrId.IsNullOrWhiteSpace())
+            else if (param.CurTransformatorId.IsNull())
             {
-                throw new Exception("Отсутствует параметр curTrId!");
+                throw new Exception("Отсутствует параметр CurTransformatorId!");
             }
-            else if (voltTrId.IsNullOrWhiteSpace())
+            else if (param.VoltTransformatorId.IsNull())
             {
-                throw new Exception("Отсутствует параметр voltTrId!");
+                throw new Exception("Отсутствует параметр VoltTransformatorId!");
             }
-
-            if (!Guid.TryParse(energyMeterId, out var energytMeter))
+            else if (param.ConsObjectId.IsNull())
             {
-                throw new Exception("Некорректный параметр energyMeterId!");
-            }
-
-            if (!Guid.TryParse(curTrId, out var curTr))
-            {
-                throw new Exception("Некорректный параметр curTrId!");
+                throw new Exception("Отсутствует параметр ConsObjectId!");
             }
 
-            if (!Guid.TryParse(voltTrId, out var voltTr))
-            {
-                throw new Exception("Некорректный параметр voltTrId!");
-            }
-
+            param.ConsObject = Context.ConsObjects
+                .FirstOrDefault(z => z.Id == param.ConsObjectId) ?? throw new Exception("Некорректный параметр ConsObjectId!");
             param.ElectricEnergyMeter = Context.ElectricEnergyMeters
-                .FirstOrDefault(z => z.Id == energytMeter) ?? throw new Exception("Некорректный параметр energyMeterId!");
+                .FirstOrDefault(z => z.Id == param.ElectricEnergyMeterId) ?? throw new Exception("Некорректный параметр ElectricEnergyMeters!");
             param.CurTransformator = Context.CurTransformators
-                .FirstOrDefault(z => z.Id == curTr) ?? throw new Exception("Некорректный параметр curTrId!");
+                .FirstOrDefault(z => z.Id == param.CurTransformatorId) ?? throw new Exception("Некорректный параметр CurTransformatorId!");
             param.VoltTransformator = Context.VoltTransformators
-                .FirstOrDefault(z => z.Id == voltTr) ?? throw new Exception("Некорректный параметр voltTrId!");
-
-            await Context.CalcEnergyPoints.AddAsync(param);
-            await Context.SaveChangesAsync();
+                .FirstOrDefault(z => z.Id == param.VoltTransformatorId) ?? throw new Exception("Некорректный параметр VoltTransformators!");
+            Context.CalcEnergyPoints.Add(param);
+            Context.SaveChanges();
         }
 
         /// <summary>
@@ -94,8 +82,9 @@ namespace Taransneft.Logic
             }
 
             var deviceIds = Context.CalcPointAndDevices
+                .Include(z => z.CalculatedDevice)
                 .Where(z => z.DateFrom.Year <= year && z.DateTo.Year >= year)
-                .Select(z => z.CalculatedDeviceId)
+                .Select(z => z.CalculatedDevice.Id)
                 .ToArray();
 
             return Context.CalculatedDevices
@@ -114,15 +103,30 @@ namespace Taransneft.Logic
             var obj = GetConsObject(id);
 
             // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
-            var energyMeters = obj.CalcEnergyPoints.Select(z => z.ElectricEnergyMeter).ToArray();
+            var energyMeters = Context.ElectricEnergyMeters
+                .Include(z => z.CalcEnergyPoint)
+                .Where(z => z.CalcEnergyPoint.IsNotNull() && z.CalcEnergyPoint.Id.In(obj.CalcEnergyPoints.Select(x => x.Id).ToArray()))
+                .ToArray();
             var deadlinedPoints = Context.CalcPointAndDevices
-                .Where(z => z.CalcEnergyPointId.In(energyMeters.Select(x => x.CalcEnergyPointId).ToArray()))
-                .GroupBy(z => z.CalcEnergyPointId)
-                .Where(z => z.Max(x => x.DateTo < DateTime.Now))
-                .Select(z => z.Key)
+                .Include(z => z.CalcEnergyPoint)
+                .Where(z => z.CalcEnergyPoint.Id.In(energyMeters.Select(x => x.CalcEnergyPoint.Id).ToArray()))
+                .GroupBy(z => z.CalcEnergyPoint.Id)
+                .Select(z => new { z.Key, DateTo = z.Max(x => x.DateTo) })
                 .ToArray();
 
-            return energyMeters.Where(z => z.CalcEnergyPointId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
+            return energyMeters
+                .Where(z => z.CalcEnergyPoint.Id.In(deadlinedPoints.Select(x => x.Key).ToArray())
+                    && ((z.CheckDate.IsNull() && deadlinedPoints.First(x => x.Key == z.CalcEnergyPoint.Id).DateTo < DateTime.Now)
+                    || z.CheckDate > deadlinedPoints.First(x => x.Key == z.CalcEnergyPoint.Id).DateTo))
+                .Select(z => new ElectricEnergyMeter
+                {
+                    Id = z.Id,
+                    Number = z.Number,
+                    CalcEnergyPointId = z.CalcEnergyPoint.Id,
+                    CheckDate = z.CheckDate,
+                    Type = z.Type
+                })
+                .ToArray();
         }
 
         /// <summary>
@@ -136,15 +140,31 @@ namespace Taransneft.Logic
             var obj = GetConsObject(id);
 
             // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
-            var voltTransformators = obj.CalcEnergyPoints.Select(z => z.VoltTransformator).ToArray();
+            var voltTransformators = Context.VoltTransformators
+                .Include(z => z.CalcEnergyPoint)
+                .Where(z => z.CalcEnergyPoint.IsNotNull() && z.CalcEnergyPoint.Id.In(obj.CalcEnergyPoints.Select(x => x.Id).ToArray()))
+                .ToArray();
             var deadlinedPoints = Context.CalcPointAndDevices
-                .Where(z => z.CalcEnergyPointId.In(voltTransformators.Select(x => x.CalcEnergyPointId).ToArray()))
-                .GroupBy(z => z.CalcEnergyPointId)
-                .Where(z => z.Max(x => x.DateTo < DateTime.Now))
-                .Select(z => z.Key)
+                .Include(z => z.CalcEnergyPoint)
+                .Where(z => z.CalcEnergyPoint.Id.In(voltTransformators.Select(x => x.CalcEnergyPoint.Id).ToArray()))
+                .GroupBy(z => z.CalcEnergyPoint.Id)
+                .Select(z => new { z.Key, DateTo = z.Max(x => x.DateTo) })
                 .ToArray();
 
-            return voltTransformators.Where(z => z.CalcEnergyPointId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
+            return voltTransformators
+                .Where(z => z.CalcEnergyPoint.Id.In(deadlinedPoints.Select(x => x.Key).ToArray())
+                    && ((z.CheckDate.IsNull() && deadlinedPoints.First(x => x.Key == z.CalcEnergyPoint.Id).DateTo < DateTime.Now)
+                    || z.CheckDate > deadlinedPoints.First(x => x.Key == z.CalcEnergyPoint.Id).DateTo))
+                .Select(z => new VoltTransformator
+                {
+                    Id = z.Id,
+                    Number = z.Number,
+                    CalcEnergyPointId = z.CalcEnergyPoint.Id,
+                    CheckDate = z.CheckDate,
+                    Type = z.Type,
+                    KT = z.KT
+                })
+                .ToArray();
         }
 
         /// <summary>
@@ -158,25 +178,32 @@ namespace Taransneft.Logic
             var obj = GetConsObject(id);
 
             // Выбрать точки измерения электроэнергии и счетчики для данного объекта потребления
-            var curTransformators = obj.CalcEnergyPoints.Select(z => z.CurTransformator).ToArray();
+            var curTransformators = Context.CurTransformators
+                .Include(z => z.CalcEnergyPoint)
+                .Where(z => z.CalcEnergyPoint.IsNotNull() && z.CalcEnergyPoint.Id.In(obj.CalcEnergyPoints.Select(x => x.Id).ToArray()))
+                .ToArray();
             var deadlinedPoints = Context.CalcPointAndDevices
-                .Where(z => z.CalcEnergyPointId.In(curTransformators.Select(x => x.CalcEnergyPointId).ToArray()))
-                .GroupBy(z => z.CalcEnergyPointId)
-                .Where(z => z.Max(x => x.DateTo < DateTime.Now))
-                .Select(z => z.Key)
+                .Include(z => z.CalcEnergyPoint)
+                .Where(z => z.CalcEnergyPoint.Id.In(curTransformators.Select(x => x.CalcEnergyPoint.Id).ToArray()))
+                .GroupBy(z => z.CalcEnergyPoint.Id)
+                .Select(z => new { z.Key, DateTo = z.Max(x => x.DateTo) })
                 .ToArray();
 
-            return curTransformators.Where(z => z.CalcEnergyPointId.In(deadlinedPoints) && z.CheckDate.IsNull()).ToArray();
+            return curTransformators
+                .Where(z => z.CalcEnergyPoint.Id.In(deadlinedPoints.Select(x => x.Key).ToArray())
+                    && ((z.CheckDate.IsNull() && deadlinedPoints.First(x => x.Key == z.CalcEnergyPoint.Id).DateTo < DateTime.Now)
+                    || z.CheckDate > deadlinedPoints.First(x => x.Key == z.CalcEnergyPoint.Id).DateTo))
+                .Select(z => new CurTransformator
+                {
+                    Id = z.Id,
+                    Number = z.Number,
+                    CalcEnergyPointId = z.CalcEnergyPoint.Id,
+                    CheckDate = z.CheckDate,
+                    Type = z.Type,
+                    KT = z.KT
+                })
+                .ToArray();
         }
-
-        /// <summary>
-        /// Получить все дочерние организации (id и имя)
-        /// </summary>
-        /// <returns>Id и имя</returns>
-        public IEnumerable<ItemInfo> GetAllChildOrganizations() 
-            => Context.ChildOrganizations
-            .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Name })
-            .ToArray();
 
         /// <summary>
         /// Получить все не используемые счетчики электроэнергии (id и имя)
@@ -184,6 +211,8 @@ namespace Taransneft.Logic
         /// <returns>Id и имя</returns>
         public IEnumerable<ItemInfo> GetDisabledElectricEnergyMeters()
             => Context.ElectricEnergyMeters
+            .Include(z => z.CalcEnergyPoint)
+            .Where(z => z.CalcEnergyPoint.IsNull())
             .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Number })
             .ToArray();
 
@@ -193,6 +222,8 @@ namespace Taransneft.Logic
         /// <returns>Id и имя</returns>
         public IEnumerable<ItemInfo> GetDisabledCurTransformators()
             => Context.CurTransformators
+            .Include(z => z.CalcEnergyPoint)
+            .Where(z => z.CalcEnergyPoint.IsNull())
             .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Number })
             .ToArray();
 
@@ -202,6 +233,8 @@ namespace Taransneft.Logic
         /// <returns>Id и имя</returns>
         public IEnumerable<ItemInfo> GetDisabledVoltTransformators()
             => Context.VoltTransformators
+            .Include(z => z.CalcEnergyPoint)
+            .Where(z => z.CalcEnergyPoint.IsNull())
             .Select(z => new ItemInfo { Id = z.Id.ToString(), Name = z.Number })
             .ToArray();
 
@@ -227,7 +260,9 @@ namespace Taransneft.Logic
         /// </summary>
         /// <param name="id">Guid</param>
         private ConsObject GetConsObject(Guid id)
-            => Context.ConsObjects.FirstOrDefault(z => z.Id == id)
+            => Context.ConsObjects
+            .Include(z => z.CalcEnergyPoints)
+            .FirstOrDefault(z => z.Id == id)
                 ?? throw new Exception($"Не найден объект потребления с Id = {id}");
     }
 }

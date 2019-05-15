@@ -10,11 +10,6 @@ namespace Transneft.Model
     public class ConsObject : OrganizationBase
     {
         /// <summary>
-        /// Конструктор
-        /// </summary>
-        public ConsObject() => DeliveryEnergyPoints = new List<DeliveryEnergyPoint>();
-
-        /// <summary>
         /// Guid дочерней организации
         /// </summary>
         public Guid ChildOrganizationId { get; set; }

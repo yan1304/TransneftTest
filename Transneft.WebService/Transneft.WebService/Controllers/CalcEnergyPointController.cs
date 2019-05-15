@@ -28,12 +28,9 @@ namespace Transneft.WebService.Controllers
         /// Добавить новую точку измерения напряжения с указанием счётчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="data">CalcEnergyPoint в json-формате</param>
-        /// <param name="energyMeterId">Id счетчика электрической энергии</param>
-        /// <param name="curTrId">Id трансформатора тока</param>
-        /// <param name="voltTrId">Id трансформатора напряжения</param>
         /// <returns>JSON-отклик</returns>
-        [HttpPost("{energyMeterId}/{curTrId}/{voltTrId}")]
-        public async Task<IActionResult> Post([FromBody] object data, string energyMeterId, string curTrId, string voltTrId)
+        [HttpPost]
+        public IActionResult Post([FromBody] object data)
         {
             Log("Start POST CalcEnergyPoint");
             try
@@ -41,7 +38,7 @@ namespace Transneft.WebService.Controllers
                 var json = $"{data}";
                 Log($"Param: {json}");
                 Log("Start QueryService.AddCalcEnergyPoint");
-                await QueryService.AddCalcEnergyPoint(json, energyMeterId, curTrId, voltTrId);
+                QueryService.AddCalcEnergyPoint(json);
                 Log("End QueryService.AddCalcEnergyPoint");
                 Log("End POST CalcEnergyPoint");
                 return new JsonResult("OK");

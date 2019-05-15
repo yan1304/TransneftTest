@@ -20,10 +20,7 @@ namespace Taransneft.Logic.Interfaces
         /// Добавить новую точку измерения с указанием счетчика, трансформатора тока и трансформатора напряжения
         /// </summary>
         /// <param name="json">JSON-данные для добавления</param>
-        /// <param name="energyMeterId">Id счетчика электрической энергии</param>
-        /// <param name="curTrId">Id трансформатора тока</param>
-        /// <param name="voltTrId">Id трансформатора напряжения</param>
-        Task AddCalcEnergyPoint(string json, string energyMeterId, string curTrId, string voltTrId);
+        void AddCalcEnergyPoint(string json);
 
         /// <summary>
         /// Выбрать все расчетные приборы в year году
@@ -52,12 +49,6 @@ namespace Taransneft.Logic.Interfaces
         /// <param name="consObjectId">Id объекта потребления</param>
         /// <returns>Трансформаторы тока</returns>
         IEnumerable<CurTransformator> GetDeadlinedCurTransformators(string consObjectId);
-
-        /// <summary>
-        /// Получить все дочерние организации (id и имя)
-        /// </summary>
-        /// <returns>Id и имя</returns>
-        IEnumerable<ItemInfo> GetAllChildOrganizations();
 
         /// <summary>
         /// Получить все не используемые счетчики электроэнергии (id и имя)
