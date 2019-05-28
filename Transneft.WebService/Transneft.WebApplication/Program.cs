@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Transneft.WebApplication
 {
+    /// <summary>
+    /// Главное окно приложения
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Точка входа
+        /// </summary>
+        /// <param name="args">Аргументы</param>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        /// Настройка хоста
+        /// </summary>
+        /// <param name="args">Аргументы</param>
+        /// <returns>Хост</returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();

@@ -4,28 +4,35 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-          crossorigin="anonymous">
+    <link href="~/lib/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/dist/css/site.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.min.js"></script>
+
 </head>
 <body>
-    <!--меню-->
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div>
-                <ul class="nav navbar-nav">
-                    <li><a href="~/Home/Index" class="navbar-brand">На главную</a></li>
-                </ul>
+    <div id="wrap">
+        <!--основной контент-->
+        <div class="container body-content">
+            <div class="withpadding">
+                @RenderBody()
             </div>
         </div>
-    </nav>
-    <!--основной контент-->
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>© 2019 - Test for Transneft</p>
-        </footer>
+    </div>
+    
+    <!--меню-->
+    <div class="footer">
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <div class="row">
+                    <p class="font-weight-normal">Transneft test progect - 2019</p>
+                </div>
+                <div class="row font-weight-bold">
+                    <ul class="nav navbar-nav">
+                        <li><a class="text-black-50" href="~/Home/Index" class="navbar-brand">На главную</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
 </body>
 </html>

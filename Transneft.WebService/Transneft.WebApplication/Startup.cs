@@ -4,18 +4,25 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Transneft.WebApplication
 {
+    /// <summary>
+    /// Startup
+    /// </summary>
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc();
-        }
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        public void ConfigureServices(IServiceCollection services) => services.AddMvc();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">IApplicationBuilder</param>
+        /// <param name="env">IHostingEnvironment</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseStaticFiles();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
